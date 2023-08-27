@@ -1,9 +1,10 @@
 <script lang="ts" setup>
-import {versions} from '#preload';
+// import {versions} from '#preload';
 </script>
 
 <template>
-  <table id="process-versions">
+  <p> info here ... ?</p>
+  <!-- <table id="process-versions">
     <tr
       v-for="(version, lib) in versions"
       :key="lib"
@@ -12,7 +13,7 @@ import {versions} from '#preload';
       <td>v{{ version }}</td>
     </tr>
   </table>
-  <code>packages/renderer/src/components/ElectronVersions.vue</code>
+  <code>packages/renderer/src/components/ElectronVersions.vue</code> -->
 </template>
 
 <style scoped>

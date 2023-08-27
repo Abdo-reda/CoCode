@@ -1,12 +1,12 @@
 {
-  "name": "vite-electron-builder",
-  "description": "Secure boilerplate for Electron app based on Vite",
-  "version": "1.0.2",
+  "name": "co_code",
+  "description": "Interactive Coop Coding aimed For Educational purposes",
+  "version": "1.0.0",
   "private": true,
   "author": {
-    "email": "kozackunisoft@gmail.com",
-    "name": "Alex Kozack",
-    "url": "https://kozack.me"
+    "email": "abdo.reda@aucegypt.edu",
+    "name": "Abdo Reda",
+    "url": "https://github.com/Abdo-reda"
   },
   "main": "packages/main/dist/index.cjs",
   "scripts": {
@@ -48,7 +48,9 @@
     "vite": "4.4.9",
     "vitest": "0.34.3",
     "vue": "3.3.4",
-    "vue-tsc": "1.8.8"
+    "vue-tsc": "1.8.8",
+    "vite-plugin-vuetify": "^1.0.2",
+    "vuetify": "^3.3.14"
   },
   "dependencies": {
     "electron-updater": "6.1.1"

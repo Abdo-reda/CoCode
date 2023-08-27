@@ -1,54 +1,53 @@
 <script lang="ts" setup>
-import ReactiveCounter from '/@/components/ReactiveCounter.vue';
-import ReactiveHash from '/@/components/ReactiveHash.vue';
-import ElectronVersions from '/@/components/ElectronVersions.vue';
-
 const APP_VERSION = import.meta.env.VITE_APP_VERSION;
+
 </script>
 
 <template>
-  <img
-    alt="Vue logo"
-    src="../assets/logo.svg"
-    width="150"
-  />
+  <v-app class="rounded rounded-lg">
+    <v-app-bar class="toolbar"></v-app-bar>
 
-  <p>
-    <!-- Example how to inject current app version to UI -->
-    App version: {{ APP_VERSION }}
-  </p>
+    <v-navigation-drawer>
+      <v-list>
+        <v-list-item title="Navigation drawer"></v-list-item>
+      </v-list>
+    </v-navigation-drawer>
 
-  <p>
-    For a guide and recipes on how to configure / customize this project,<br />
-    check out the
-    <a
-      href="https://github.com/cawa-93/vite-electron-builder"
-      target="_blank"
+    <v-main
+      class="d-flex align-center justify-center"
+      style="min-height: 300px;"
     >
-      vite-electron-builder documentation
-    </a>
-    .
-  </p>
+      Main Content
+    </v-main>
 
-  <fieldset>
-    <legend>Test Vue Reactivity</legend>
-    <reactive-counter />
-  </fieldset>
+    <v-footer class="flex-0-0 rounded rounded-lg">
+      <code class="text-overline font-weight-thin font-italic text-disabled">
+        version: {{ APP_VERSION }}
+      </code>
+    </v-footer>
+  </v-app>
 
-  <fieldset>
-    <legend>Test Node.js API</legend>
-    <reactive-hash />
-  </fieldset>
+  <!-- toolbar -->
+  <!-- <main-header> </main-header> -->
 
-  <fieldset>
-    <legend>Environment</legend>
-    <electron-versions />
-  </fieldset>
+  <!-- Logo -->
+  <!-- <div>
+    <code>CO_CODE</code>
+    <img alt="Vue logo" src="../assets/logo.svg" width="150" />
+  </div> -->
 
-  <p>
-    Edit
-    <code>packages/renderer/src/App.vue</code> to test hot module replacement.
-  </p>
+  <!-- Options -->
+  <!-- <div>
+    <v-btn prepend-icon="$vuetify">
+      Host
+    </v-btn>
+    <v-btn prepend-icon="$vuetify">
+      Client
+    </v-btn>
+  </div> -->
+
+  <!-- Footer -->
+  <!-- <main-footer> </main-footer> -->
 </template>
 
 <style>
@@ -56,14 +55,13 @@ const APP_VERSION = import.meta.env.VITE_APP_VERSION;
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
+  /* text-align: center;
   color: #2c3e50;
   margin: 60px auto;
-  max-width: 700px;
+  max-width: 700px; */
 }
 
-fieldset {
-  margin: 2rem;
-  padding: 1rem;
+.toolbar {
+  -webkit-app-region: drag;
 }
 </style>
