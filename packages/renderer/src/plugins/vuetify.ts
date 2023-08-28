@@ -1,11 +1,12 @@
 import type {ThemeDefinition} from 'vuetify';
 import { createVuetify} from 'vuetify';
+import '@mdi/font/css/materialdesignicons.css';
 
 const defualtDarkTheme: ThemeDefinition = {
     dark: true,
     colors: {
       background: '#121212',
-      surface: '#121212',
+      surface: '#202020',
       primary: '#1c7ef6',
       'primary-darken-1': '#1356a8',
       secondary: '#f5a81b',
@@ -43,3 +44,6 @@ const defualtDarkTheme: ThemeDefinition = {
     },
   });
   
+
+
+

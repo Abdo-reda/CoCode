@@ -7,11 +7,12 @@ async function createWindow() {
     frame: false,
     titleBarStyle: 'hidden',
     titleBarOverlay: {
-      color: '#121212',
+      color: 'rgba(0, 0, 0, 0.0)',
       symbolColor: '#f5a81b',
       height: 24,
     },
     transparent: true,
+    resizable: true,
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
