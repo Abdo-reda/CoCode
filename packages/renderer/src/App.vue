@@ -7,10 +7,10 @@ const APP_VERSION = import.meta.env.VITE_APP_VERSION;
   <v-app class="rounded rounded-b-xl">
     <v-app-bar class="toolbar">
       <!-- Temp Nav for testing  -->
-      <nav>
+      <nav class="mx-4">
         <router-link to="/">Home</router-link> |
         <router-link to="/about">About</router-link> |
-        <router-link to="/host">Host</router-link>
+        <router-link to="/host">Host</router-link> | 
         <router-link to="/client">Client</router-link>
       </nav>
     </v-app-bar>
@@ -25,8 +25,8 @@ const APP_VERSION = import.meta.env.VITE_APP_VERSION;
       <router-view> </router-view>
     </v-main>
 
-    <v-footer class="flex-0-0 rounded rounded-b-xl">
-      <code class="text-overline font-weight-thin font-italic text-disabled">
+    <v-footer class="app-footer flex-0-0 rounded rounded-b-xl pa-0">
+      <code class="text-overline font-weight-thin font-italic text-disabled pl-4">
         version: {{ APP_VERSION }}
       </code>
     </v-footer>
@@ -46,6 +46,10 @@ const APP_VERSION = import.meta.env.VITE_APP_VERSION;
 
 nav {
   -webkit-app-region: no-drag;
+}
+
+.app-footer {
+  border-top: 1px solid #373737 !important;
 }
 
 .toolbar {

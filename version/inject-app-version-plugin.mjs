@@ -1,7 +1,7 @@
 import {getVersion} from './getVersion.mjs';
 
 /**
- * Somehow inject app version to vite build context
+ * Inject app version to vite build context
  * @return {import('vite').Plugin}
  */
 export const injectAppVersion = () => ({
