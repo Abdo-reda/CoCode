@@ -2,18 +2,8 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import electronService from '../../services/electronService';
-// import {IO} from '#preload'; //THIS METHOD WON"T BE POSSIBLE ON THE WEB ... how the fuck do I import the io
-import IO from 'socket.io-client';
 
 const downloadPopup = ref(false);
-
-
-function connectClient() {
-  console.log('client is trying to connect ...');
-  const socket = IO('http://localhost:8899'); //this address will depend on the server
-  console.log('client connected?', socket.id);
-}
-
 </script>
 
 <template>
@@ -62,7 +52,7 @@ function connectClient() {
       <v-btn
         color="secondary"
         prepend-icon="mdi-lan-connect"
-        @click="connectClient()"
+        to="/client"
       >
         Client
       </v-btn>
