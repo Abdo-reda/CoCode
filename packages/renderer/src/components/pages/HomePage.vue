@@ -2,16 +2,17 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import electronService from '../../services/electronService';
-
-/*
-  - check if desktop app
-    //if desktop app reroute and run the websocker or server or whatever...
-    //if not, do a popup that gives link to desktop app
-  - 
-
-*/
+// import {IO} from '#preload'; //THIS METHOD WON"T BE POSSIBLE ON THE WEB ... how the fuck do I import the io
+import IO from 'socket.io-client';
 
 const downloadPopup = ref(false);
+
+
+function connectClient() {
+  console.log('client is trying to connect ...');
+  const socket = IO('http://localhost:8899'); //this address will depend on the server
+  console.log('client connected?', socket.id);
+}
 
 </script>
 
@@ -61,6 +62,7 @@ const downloadPopup = ref(false);
       <v-btn
         color="secondary"
         prepend-icon="mdi-lan-connect"
+        @click="connectClient()"
       >
         Client
       </v-btn>

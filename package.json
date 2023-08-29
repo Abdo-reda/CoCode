@@ -31,6 +31,7 @@
   },
   "devDependencies": {
     "@mdi/font": "^7.2.96",
+    "@types/is-even": "^1.0.0",
     "@types/node": "18.17.11",
     "@typescript-eslint/eslint-plugin": "6.4.1",
     "@vitejs/plugin-vue": "4.3.3",
@@ -55,6 +56,8 @@
   },
   "dependencies": {
     "electron-updater": "6.1.1",
+    "socket.io": "^4.7.2",
+    "socket.io-client": "^4.7.2",
     "vue-router": "^4.2.4"
   }
 }

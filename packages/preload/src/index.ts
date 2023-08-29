@@ -4,7 +4,9 @@
 
 import { contextBridge } from 'electron';
 import ElectronAPI from './electronAPI';
+import IO from 'socket.io-client';
 
+export {IO};
 export {sha256sum} from './nodeCrypto';
 export {versions} from './versions';
 
