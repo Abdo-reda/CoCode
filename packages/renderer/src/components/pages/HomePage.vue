@@ -17,16 +17,21 @@
       </v-card-item>
 
       <v-card-text>
-        <code class="text-medium-emphasis font-weight-thin font-italic"> Welcome To Co_Code, The Collaborative Coding Experience! </code>
+        <code
+          class="text-medium-emphasis font-weight-thin font-italic"
+        > Welcome To Co_Code, The Collaborative Coding Experience! </code>
       </v-card-text>
     </v-card>
 
 
     <!-- Options -->
     <div class="d-flex align-center justify-space-between ">
-      <v-btn prepend-icon="mdi-server-plus">
-        Host
-      </v-btn>
+      <router-link to="/host">
+        <v-btn prepend-icon="mdi-server-plus">
+          Host
+        </v-btn>
+      </router-link>
+
       <v-btn prepend-icon="mdi-lan-connect">
         Client
       </v-btn>

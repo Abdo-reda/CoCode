@@ -7,17 +7,18 @@ const APP_VERSION = import.meta.env.VITE_APP_VERSION;
   <v-app class="rounded rounded-b-xl">
     <v-app-bar class="toolbar">
       <!-- Temp Nav for testing  -->
-      <!-- <nav>
+      <nav>
         <router-link to="/">Home</router-link> |
         <router-link to="/about">About</router-link> |
-        <router-link to="/contact">Contact</router-link>
-      </nav> -->
+        <router-link to="/host">Host</router-link>
+        <router-link to="/client">Client</router-link>
+      </nav>
     </v-app-bar>
 
     <!-- <v-navigation-drawer>
        <v-list>
         <v-list-item title="Navigation drawer"></v-list-item>
-      </v-list> 
+      </v-list>
     </v-navigation-drawer> -->
 
     <v-main class="d-flex align-center justify-center">
