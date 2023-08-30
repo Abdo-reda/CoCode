@@ -1,7 +1,10 @@
 import {Server} from 'socket.io';
 import {writeFile, appendFile, truncate, statSync } from 'node:fs';
+import {diff_match_patch} from 'diff-match-patch';
 
+const DMP = new diff_match_patch();
 writeFile('test.txt', '', _ => {});
+let latestText = '';
 
 export default function createWebSocketServer() {
   //TODO: for now I will hardcode the port ... I guess ...
@@ -24,11 +27,18 @@ export default function createWebSocketServer() {
       console.log('client-add', content);
       appendFile('test.txt', content, _ => {});
     });
+
     socket.on('client-del', (content, _) => {
       console.log('client-del', content);
       const numBytes = statSync('test.txt').size - Buffer.byteLength(content, 'utf8');
       truncate('test.txt', numBytes, _ => {});
     });
+
+    socket.on('client-diff', (patches, _) => {
+      latestText = DMP.patch_apply(patches, latestText)[0];
+      writeFile('test.txt', latestText, _ => {});
+    });
+
   });
 
   return wsServer;
