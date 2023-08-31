@@ -5,7 +5,11 @@ const APP_VERSION = import.meta.env.VITE_APP_VERSION;
 
 <template>
   <v-app class="rounded rounded-b-xl">
-    <v-app-bar class="toolbar">
+    <v-app-bar
+      density="compact"
+      height="2em"
+      class="toolbar"
+    >
       <!-- Temp Nav for testing  -->
       <nav class="mx-4">
         <router-link to="/">Home</router-link> |
@@ -20,12 +24,15 @@ const APP_VERSION = import.meta.env.VITE_APP_VERSION;
         <v-list-item title="Navigation drawer"></v-list-item>
       </v-list>
     </v-navigation-drawer> -->
-
+ 
     <v-main class="d-flex align-center justify-center">
       <router-view> </router-view>
     </v-main>
 
-    <v-footer class="app-footer flex-0-0 rounded rounded-b-xl pa-0">
+    <v-footer
+      class="app-footer flex-0-0 rounded rounded-b-xl pa-0"
+      :app="true"
+    >
       <code class="text-overline font-weight-thin font-italic text-disabled pl-4">
         version: {{ APP_VERSION }}
       </code>
@@ -50,9 +57,12 @@ nav {
 
 .app-footer {
   border-top: 1px solid #373737 !important;
+  height: 1.5em;
 }
 
 .toolbar {
   -webkit-app-region: drag;
+  border-bottom: 1px solid #373737 !important;
+  height: 2em;
 }
 </style>

@@ -9,10 +9,10 @@ async function createWindow() {
     titleBarOverlay: {
       color: 'rgba(0, 0, 0, 0.0)',
       symbolColor: '#f5a81b',
-      height: 24,
     },
     transparent: true,
     resizable: true,
+    maximizable: true,
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,

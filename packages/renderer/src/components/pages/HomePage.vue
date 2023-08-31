@@ -1,13 +1,12 @@
 
 <script lang="ts" setup>
+import ClientForm from '/@/components/single/ClientForm.vue';
 import { ref } from 'vue';
 import electronService from '../../services/electronService';
-import IO from 'socket.io-client';
 
-const downloadPopup = ref(true);
-const clientPopup = ref(true);
-const clientName = ref('');
-const hostRoom = ref('');
+const hostPopup = ref(false);
+const clientPopup = ref(false);
+// const hostRoom = ref('');
 
 /*
   TODO:
@@ -17,18 +16,9 @@ const hostRoom = ref('');
 
 //later - maybe store the rooms somewhere where the client can fetch and join them (so joining a random room I guess..)
 
-function connectClient() {
-
-  console.log('client is trying to connect ...');
-  const socket = IO('http://localhost:8899'); //this address will depend on the server
-  console.log('client connected?', socket.id);
-  return socket;
-  //TODO: emit an event when the client connects successfully and after it reroute to the client page.
-}
-
-function toUpper() {
-  hostRoom.value = hostRoom.value.toUpperCase();
-}
+// function toUpper() {
+//   hostRoom.value = hostRoom.value.toUpperCase();
+// }
 
 </script>
 
@@ -55,30 +45,29 @@ function toUpper() {
 
     <!-- Options -->
     <div class="d-flex justify-space-between ">
-      <v-btn
-        v-if="electronService.isDesktop"
-        color="primary"
-        class="text-background"
-        to="/host"
-        prepend-icon="mdi-server-plus"
-      >
-        Host
-      </v-btn>
-      <div
-        v-else
-        class="button-form d-flex flex-column align-center"
-      >
+      <div class="button-form d-flex flex-column align-center">
         <v-btn
+          v-if="electronService.isDesktop"
+          color="primary my-4"
+          class="text-background"
+          to="/host"
+          prepend-icon="mdi-server-plus"
+        >
+          Host
+        </v-btn>
+
+        <v-btn
+          v-else
           variant="tonal"
           class="text-primary-darken-1 my-4"
           prepend-icon="mdi-server-plus"
-          @click="downloadPopup = !downloadPopup;"
+          @click="hostPopup = !hostPopup;"
         >
           Host
         </v-btn>
         <v-fade-transition :hide-on-leave="true">
           <v-card
-            v-if="downloadPopup"
+            v-if="hostPopup"
             elevation="16"
           >
             <div class="ma-4">
@@ -129,56 +118,7 @@ function toUpper() {
             class="button-form"
             elevation="16"
           >
-            <div class="ma-4">
-              <div class="text-center ma-2">
-                <div class="font-italic text-secondary">Client Setup</div>
-              </div>
-
-              <div class="d-flex align-center justify-center">
-                <v-form
-                  class="w-100 d-flex flex-column align-center"
-                  @submit.prevent
-                >
-                  <!-- <v-text-field :rules="rules" label="First name"></v-text-field> -->
-                  <v-text-field
-                    v-model="clientName"
-                    class="w-100 ma-2"
-                    variant="filled"
-                    base-color="secondary-darken-1"
-                    density="compact"
-                    color="secondary-darken-1"
-                    label="Client Name"
-                    required
-                    hide-details
-                  ></v-text-field>
-                  <v-text-field
-                    class="w-100 ma-2"
-                    variant="filled"
-                    base-color="primary-darken-1"
-                    v-model="hostRoom"
-                    density="compact"
-                    color="primary-darken-1"
-                    label="Host Room"
-                    required
-                    @input="toUpper()"
-                    hide-details
-                  ></v-text-field>
-                  <v-btn
-                    variant="outlined"
-                    size="small"
-                    color="secondary"
-                    type="submit"
-                    class="ma-2"
-                    @click="connectClient()"
-                  >
-                    Join
-                  </v-btn>
-                </v-form>
-
-                <!-- v-model="firstname"
-              :rules="nameRules" -->
-              </div>
-            </div>
+            <client-form> </client-form>
           </v-card>
         </v-fade-transition>
       </div>

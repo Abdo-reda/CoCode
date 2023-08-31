@@ -38,12 +38,14 @@ let content = ref("console.log('hello client :)')");
 //   }
 // }
 
+
+
 </script>
 
 
 <template>
   <div class="w-100 text-center ma-4">
-    <p> ------- client ------- </p>
+    <code> CLIENT_NAME</code>
     <CodeEditor
       v-model="content"
       class="w-100 my-4"
@@ -61,7 +63,8 @@ let content = ref("console.log('hello client :)')");
 <style>
 .code-editor {
   overflow-y: auto;
-  max-height: 80vh;
+  max-height: calc(100vh - 10em); 
+  /* there must be a better approach */
 }
 
 .code-editor .header {
