@@ -40,7 +40,7 @@
           color="secondary"
           type="submit"
           class="ma-2"
-          @click="connectClient()"
+          @click="join()"
         >
           Join
         </v-btn>
@@ -52,7 +52,7 @@
 </template>
 
 <script>
-import { connectSocket } from '/@/services/webSocketService';
+import { connectClient } from '/@/services/webSocketService';
 
 
 export default {
@@ -64,18 +64,11 @@ export default {
         };
     },
     methods: {
-        connectClient() {
+        join() {
             this.loading = true;
-            const socket = connectSocket();
-            socket.on('connect', () => {
-                console.log('client connected', socket.id);
-                socket.emit('client-join', {
-                    clientName: this.clientName,
-                });
-                this.loading = false;
-                this.$router.push({ path: 'client' });
-            });
-             //TODO: emit an event when the client connects successfully and after it reroute to the client page.
+            connectClient();
+            //TODO: emit an event when the client connects successfully and after it reroute to the client page.
+            this.$router.push( { path: 'client'});
         },
     },
 };

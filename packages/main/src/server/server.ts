@@ -20,9 +20,16 @@ export default function createWebSocketServer() {
     // pingInterval: 25000, //how often to ping the client
     // pingTimeout: 20000, //how long to wait for a ping response
   });
-  console.log('---- sockets');
+
+
   wsServer.on('connection', socket => {
     console.log('a user connected', socket.id);
+
+    socket.on('client-join', (clientName, _) => {
+      //send client name to host frontend ... mainWindow.webContents.send() ...
+      console.log('--- host received client name', clientName);
+    });
+
     socket.on('client-add', (content, _) => {
       console.log('client-add', content);
       appendFile('test.txt', content, _ => {});

@@ -54,8 +54,6 @@ let content = ref("console.log('hello client :)')");
       font-size="14px"
       :languages="[['javascript', 'JS'], ['cpp', 'C++'],['python', 'Python'],['php', 'PHP']]"
     >
-    <!-- wrap don't work with line numbers -->
-    <!--      @content="getContent" ??? -->
     </CodeEditor>
   </div>
 </template>
@@ -63,7 +61,7 @@ let content = ref("console.log('hello client :)')");
 <style>
 .code-editor {
   overflow-y: auto;
-  max-height: calc(100vh - 10em); 
+  max-height: calc(100vh - 10em);
   /* there must be a better approach */
 }
 
