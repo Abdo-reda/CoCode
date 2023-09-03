@@ -9,17 +9,17 @@ declare global {
 }
 
 export default {
-  isDesktop: window.ElectronAPI.isDesktop,
+  isDesktop: window.ElectronAPI?.isDesktop,
   openNewWindow() {
-    window.ElectronAPI.openNewWindow();
+    window.ElectronAPI?.openNewWindow();
   },
   hostServer() {
-    window.ElectronAPI.hostServer();
+    window.ElectronAPI?.hostServer();
   },
   onClientJoined(callback: ElectronCallbackFunc) {
-    window.ElectronAPI.onClientJoined(callback);
+    window.ElectronAPI?.onClientJoined(callback);
   },
   onClientType(callback: ElectronCallbackFunc) {
-    window.ElectronAPI.onClientType(callback);
+    window.ElectronAPI?.onClientType(callback);
   },
 };
