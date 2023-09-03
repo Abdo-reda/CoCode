@@ -1,5 +1,14 @@
-import {app, BrowserWindow} from 'electron';
+import {app, BrowserWindow, ipcMain} from 'electron';
 import {join, resolve} from 'node:path';
+import createWebSocketServer from '/@/server/server';
+import type {Server} from 'socket.io';
+import {writeFile, appendFile, truncate, statSync } from 'node:fs';
+import {diff_match_patch} from 'diff-match-patch';
+
+const DMP = new diff_match_patch();
+const clientsText = new Map<string, string>();
+
+
 
 async function createWindow() {
   const browserWindow = new BrowserWindow({
@@ -22,45 +31,68 @@ async function createWindow() {
     },
   });
 
-  /**
-   * If the 'show' property of the BrowserWindow's constructor is omitted from the initialization options,
-   * it then defaults to 'true'. This can cause flickering as the window loads the html content,
-   * and it also has show problematic behaviour with the closing of the window.
-   * Use `show: false` and listen to the  `ready-to-show` event to show the window.
-   *
-   * @see https://github.com/electron/electron/issues/25012 for the afford mentioned issue.
-   */
+ 
   browserWindow.on('ready-to-show', () => {
     browserWindow?.show();
-
     if (import.meta.env.DEV) {
       browserWindow?.webContents.openDevTools();
     }
   });
 
-  /**
-   * Load the main page of the main window.
-   */
   if (import.meta.env.DEV && import.meta.env.VITE_DEV_SERVER_URL !== undefined) {
-    /**
-     * Load from the Vite dev server for development.
-     */
     await browserWindow.loadURL(import.meta.env.VITE_DEV_SERVER_URL);
   } else {
-    /**
-     * Load from the local file system for production and test.
-     *
-     * Use BrowserWindow.loadFile() instead of BrowserWindow.loadURL() for WhatWG URL API limitations
-     * when path contains special characters like `#`.
-     * Let electron handle the path quirks.
-     * @see https://github.com/nodejs/node/issues/12682
-     * @see https://github.com/electron/electron/issues/6869
-     */
     await browserWindow.loadFile(resolve(__dirname, '../../renderer/dist/index.html'));
   }
 
   return browserWindow;
 }
+
+
+function webSocketServerSubscribeEvents(wsServer: Server) {
+  wsServer.on('connection', socket => {
+    console.log('a user connected', socket.id);
+
+    socket.on('client-join', (client, _) => {
+      console.log('--- host received client name', client.name);
+      clientsText.set(client.uuid, '');
+      BrowserWindow.getAllWindows().find(w => w.webContents.send('on-client-joined', client)); //Temp solution, in reality there will only be one instance which we will send to.
+    });
+
+    socket.on('client-add', (content, _) => {
+      console.log('client-add', content);
+      appendFile('test.txt', content, _ => {});
+    });
+
+    socket.on('client-del', (content, _) => {
+      console.log('client-del', content);
+      const numBytes = statSync('test.txt').size - Buffer.byteLength(content, 'utf8');
+      truncate('test.txt', numBytes, _ => {});
+    });
+
+    socket.on('client-diff', (clientId: string, patches, _) => {
+      clientsText.set(clientId, DMP.patch_apply(patches, clientsText.get(clientId)!)[0]);
+      //I can either send uuid for the client text or have each client has a room.
+      BrowserWindow.getAllWindows().find(w => w.webContents.send('on-client-type', clientId, clientsText.get(clientId))); //Temp solution, in reality there will only be one instance which we will send to. 
+      writeFile(`clients_texts/client_${clientId}`, clientsText.get(clientId)!, _ => {});
+    });
+
+  });
+}
+
+
+function windowSubscribeEvents() {
+  ipcMain.on('open-new-window', () => {
+    createWindow();
+  });
+
+  ipcMain.once(('host-server'), () => {
+    console.log('hosting websocket server ...');
+    const wsServer = createWebSocketServer();
+    webSocketServerSubscribeEvents(wsServer);
+  });
+}
+
 
 /**
  * Restore an existing BrowserWindow or Create a new BrowserWindow.
@@ -70,6 +102,7 @@ export async function restoreOrCreateWindow() {
 
   if (window === undefined) {
     window = await createWindow();
+    windowSubscribeEvents();
   }
 
   if (window.isMinimized()) {

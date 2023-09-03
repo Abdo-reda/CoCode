@@ -2,7 +2,6 @@ import {app} from 'electron';
 import './security-restrictions';
 import {restoreOrCreateWindow} from '/@/mainWindow';
 import {platform} from 'node:process';
-import createWebSocketServer from '/@/server/server';
 
 /**
  * Prevent electron from running multiple instances.
@@ -29,7 +28,6 @@ app
   .then(restoreOrCreateWindow)
   .catch(e => console.error('Failed create window:', e));
 
-  createWebSocketServer();
 
 /**
  * Install Vue.js or any other extension in development mode only.

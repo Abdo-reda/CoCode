@@ -1,24 +1,22 @@
-
 <script lang="ts" setup>
 import ClientForm from '/@/components/single/ClientForm.vue';
-import { ref } from 'vue';
-import electronService from '../../services/electronService';
+import { ref, inject } from 'vue';
+import electronService from '/@/services/electronService';
+import { hostServer } from '/@/services/webSocketService';
+import { useRouter } from 'vue-router';
+import {ToastEvent} from '/@/events/keys';
 
+// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any
+const toastEvent: any = inject(ToastEvent); //I will make it typesafe later .. https://logaretm.com/blog/type-safe-provide-inject/
+const router = useRouter();
 const hostPopup = ref(false);
 const clientPopup = ref(false);
-// const hostRoom = ref('');
 
-/*
-  TODO:
-    - validate input
-    - turn room into a valid ipaddress and port
-*/
-
-//later - maybe store the rooms somewhere where the client can fetch and join them (so joining a random room I guess..)
-
-// function toUpper() {
-//   hostRoom.value = hostRoom.value.toUpperCase();
-// }
+function host() {
+  hostServer();
+  toastEvent.showToast('Hosting Server...', 'info');
+  router.push( { path: 'host'});
+}
 
 </script>
 
@@ -50,8 +48,8 @@ const clientPopup = ref(false);
           v-if="electronService.isDesktop"
           color="primary my-4"
           class="text-background"
-          to="/host"
           prepend-icon="mdi-server-plus"
+          @click="host()"
         >
           Host
         </v-btn>
@@ -113,13 +111,12 @@ const clientPopup = ref(false);
           Client
         </v-btn>
         <v-fade-transition :hide-on-leave="true">
-          <v-card
+          <div
             v-if="clientPopup"
             class="button-form"
-            elevation="16"
           >
             <client-form> </client-form>
-          </v-card>
+          </div>
         </v-fade-transition>
       </div>
     </div>
@@ -128,7 +125,7 @@ const clientPopup = ref(false);
 
 <style>
 .button-form {
-  width: 12em;
+  width: 16em;
 }
 </style>
 

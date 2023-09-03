@@ -1,5 +1,9 @@
 import type { Socket } from 'socket.io-client';
 import IO from 'socket.io-client';
+import { ref, reactive } from 'vue';
+import electronService from './electronService';
+import type { IClient} from './clientService';
+import { newClient } from './clientService';
 
 const lowerAlphabet = Array.from({ length: 26 }, (_, i) => String.fromCharCode(97 + i));
 const upperAlphabet = Array.from({ length: 26 }, (_, i) => String.fromCharCode(65 + i));
@@ -13,11 +17,11 @@ codesMap.forEach((char, index) => {
 });
 
 const PORT = 8899;
+let clientSocket: Socket;
 
-function dec2bin(dec: number) {
-  return (dec >>> 0).toString(2);
-}
-
+// function dec2bin(dec: number) {
+//   return (dec >>> 0).toString(2);
+// }
 
 function addressToIp(ipAddress: string): number
 {
@@ -33,10 +37,9 @@ function addressToIp(ipAddress: string): number
 function ipToRoomNum(ip32Bit: number): number[]
 {
   const roomNumbers = [];
-  console.log(ip32Bit, dec2bin(ip32Bit));
   for (let i = 0; i < 6; i++) {
-      const curNum = (ip32Bit >>> (30 - (i * 6))) & 0b111111;
-      roomNumbers.push(curNum);
+    const curNum = (ip32Bit >>> (30 - (i * 6))) & 0b111111;
+    roomNumbers.push(curNum);
   }
   return roomNumbers;
 }
@@ -44,7 +47,7 @@ function ipToRoomNum(ip32Bit: number): number[]
 
 function roomNumToRoomCode(roomNumbers: number[]): string
 {
-    return roomNumbers.map(num => codesMap[num]).join('');
+  return roomNumbers.map(num => codesMap[num]).join('');
 }
 
 
@@ -75,19 +78,29 @@ function ipToAddress(ip32Bit: number): string
   return address;
 }
 
+export const isConnected = ref(false);
+export const connectError = reactive({
+  error: false,
+  message: '',
+});
+export const clientRef = reactive<IClient>({
+  name: '',
+  uuid: '',
+  content: '',
+});
 
 /**
  * Gets the room code from a given ip address.
  * The process is address --> ip (32bit) --> roomNumbers --> roomCode
  * @param address: string
  * @returns roomCode: string
- */
+*/
 export function getRoomCode(address: string): string
 {
-    const ip32Bit = addressToIp(address);
-    const roomNumbers = ipToRoomNum(ip32Bit);
-    const roomCode = roomNumToRoomCode(roomNumbers);
-    return roomCode;
+  const ip32Bit = addressToIp(address);
+  const roomNumbers = ipToRoomNum(ip32Bit);
+  const roomCode = roomNumToRoomCode(roomNumbers);
+  return roomCode;
 }
 
 /**
@@ -95,7 +108,7 @@ export function getRoomCode(address: string): string
  * The process is roomCode --> roomNumbers --> ip (32bit) --> address
  * @param roomCode: string
  * @returns
- */
+*/
 export function getAddress(roomCode: string): string
 {
     const roomNumbers = roomCodeToRoomNum(roomCode);
@@ -113,7 +126,9 @@ export function getAddress(roomCode: string): string
 export function connectSocket(roomCode: string): Socket
 {
     const address = getAddress(roomCode);
-    const socket = IO(`ws://${address}:${PORT}`);  //TODO: should it be https longpolling or ws or wss?
+    const socket = IO(`ws://${address}:${PORT}`, {
+      timeout: 15000,
+    });  //TODO: should it be https longpolling or ws or wss?
     return socket;
 }
 
@@ -128,18 +143,54 @@ export function connectClient(clientName: string, roomCode: string): Socket
     const socket = connectSocket(roomCode);
     socket.on('connect', () => {
       console.log(`${clientName} connected to socket ${socket.id}`);
-      socket.emit('client-join', {
-        clientName: clientName,
-      });
+      const createdClient: IClient = newClient(clientName);
+      socket.emit('client-join', createdClient);
+      clientRef.uuid = createdClient.uuid;
+      isConnected.value = true;
     });
 
     socket.on('disconnect', (_) => {
       console.log(`${clientName} has disconnected from socket ${socket.id}`);
+      isConnected.value = false;
     });
 
-    socket.on('connect_error', (_) => {
-      console.log(`${clientName} error connecting on socket ${socket.id}`);
+    socket.on('connect_error', (error) => {
+      console.log(`${clientName} error connecting on socket`);
+      isConnected.value = false;
+      connectError.error = true;
+      connectError.message = error.message;
+      socket.disconnect();
     });
 
+    socket.io.on('reconnect_attempt', () => {
+      // current reconnection attempt is starting ...
+      console.log(`${clientName} is attempting to reconnect on socket`);
+    });
+
+    socket.io.on('reconnect_error', (_) => {
+      // current reconnect attempt failed
+      console.log(`${clientName} reconnection attempt failed`);
+    });
+
+    socket.io.on('reconnect_failed', () => {
+      // all reconnection attemps have failed 
+      console.log(`${clientName} all reconnection attempt have failed`);
+    });
+    
+    socket.io.on('reconnect', () => {
+      // successful reconnection
+      console.log(`${clientName} successful reconnection`);
+    });
+
+    clientSocket = socket;
     return socket;
+}
+
+export function getClientSocket(): Socket
+{
+  return clientSocket;
+}
+
+export function hostServer() {
+  electronService.hostServer();
 }

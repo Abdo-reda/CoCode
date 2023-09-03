@@ -1,4 +1,4 @@
-import type {IpcRendererEvent} from 'electron';
+import {type IpcRendererEvent, ipcRenderer} from 'electron';
 
 //find another way to disable eslint for any, too lazy to do this now.
 // eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any
@@ -6,5 +6,22 @@ export type ElectronCallbackFunc = (event: IpcRendererEvent, ...args: any[]) => 
 
 export default class ElectronAPI {
   public isDesktop = true;
+  
   constructor() {}
+
+  public openNewWindow() {
+    ipcRenderer.send('open-new-window');
+  }
+
+  public hostServer() {
+    ipcRenderer.send('host-server');
+  }
+
+  public onClientJoined(callback: ElectronCallbackFunc) {
+    ipcRenderer.on('on-client-joined', callback);
+  }
+
+  public onClientType(callback: ElectronCallbackFunc) {
+    ipcRenderer.on('on-client-type', callback);
+  }
 }

@@ -1,10 +1,29 @@
 <script lang="ts" setup>
+import { provide, ref } from 'vue';
+import electronService from '/@/services/electronService';
+import ToastNotification from '/@/components/shared/ToastNotification.vue';
+import {ToastEvent} from '/@/events/keys';
 const APP_VERSION = import.meta.env.VITE_APP_VERSION;
+
+const toastShow = ref(false);
+const toastText = ref('');
+const toastColor = ref('info');
+
+function showToast(text:string, color: string) {
+  toastShow.value = true;
+  toastText.value = text;
+  toastColor.value = color;
+}
+
+provide(ToastEvent, {
+  showToast,
+});
+
 
 </script>
 
 <template>
-  <v-app class="rounded rounded-b-xl">
+  <v-app>
     <v-app-bar
       density="compact"
       height="2em"
@@ -15,7 +34,14 @@ const APP_VERSION = import.meta.env.VITE_APP_VERSION;
         <router-link to="/">Home</router-link> |
         <router-link to="/about">About</router-link> |
         <router-link to="/host">Host</router-link> | 
-        <router-link to="/client">Client</router-link>
+        <router-link to="/client">Client</router-link> |
+        <v-btn
+          variant="text"
+          size="small"
+          @click="electronService.openNewWindow()"
+        >
+          New Window
+        </v-btn>
       </nav>
     </v-app-bar>
 
@@ -25,17 +51,26 @@ const APP_VERSION = import.meta.env.VITE_APP_VERSION;
       </v-list>
     </v-navigation-drawer> -->
  
-    <v-main class="d-flex align-center justify-center">
-      <router-view> </router-view>
+    <v-main class="d-flex flex-column align-center justify-center">
+      <div class="main-container">
+        <router-view> </router-view>
+      </div>
     </v-main>
+    
+    <toast-notification
+      :show="toastShow"
+      :color="toastColor"
+      :text="toastText"
+    >
+    </toast-notification>
 
     <v-footer
-      class="app-footer flex-0-0 rounded rounded-b-xl pa-0"
+      class="app-footer flex-0-0 pa-0"
       :app="true"
     >
-      <code class="text-overline font-weight-thin font-italic text-disabled pl-4">
-        version: {{ APP_VERSION }}
-      </code>
+      <p class="text-overline font-weight-thin font-italic text-disabled pa-1">
+        version-{{ APP_VERSION }}
+      </p>
     </v-footer>
   </v-app>
 </template>
@@ -51,18 +86,42 @@ const APP_VERSION = import.meta.env.VITE_APP_VERSION;
   max-width: 700px; */
 }
 
+.main-container {
+  height: 100%;
+  width: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* .main-container {
+  height: 100%;
+  width: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+} */
+
 nav {
   -webkit-app-region: no-drag;
 }
 
 .app-footer {
-  border-top: 1px solid #373737 !important;
+  border: 1px solid #373737 !important;
   height: 1.5em;
 }
 
 .toolbar {
   -webkit-app-region: drag;
-  border-bottom: 1px solid #373737 !important;
+  border: 1px solid #373737 !important;
   height: 2em;
 }
 </style>

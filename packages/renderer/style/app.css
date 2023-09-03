@@ -3,20 +3,3 @@ html {
     overflow-y: hidden !important;
 }
 
-*::-webkit-scrollbar {
-  width: 0.2em;
-}
-
-*::-webkit-scrollbar-track {
-  /* box-shadow: inset 0 0 6px rgb(0, 0, 0, 0); */
-}
-
-*::-webkit-scrollbar-thumb {
-  background-color: #353535;
-  /* outline: 1px solid rgb(0, 0, 0, 0); c28515, f5a81b*/
-}
-
-
-*::-webkit-scrollbar-thumb:hover {
-  background: #c28515;
-}

@@ -1,13 +1,9 @@
 import {Server} from 'socket.io';
-import {writeFile, appendFile, truncate, statSync } from 'node:fs';
-import {diff_match_patch} from 'diff-match-patch';
-
-const DMP = new diff_match_patch();
-writeFile('test.txt', '', _ => {});
-let latestText = '';
 
 export default function createWebSocketServer() {
+  
   //TODO: for now I will hardcode the port ... I guess ...
+  //TODO: I will check whether the server has been created successfully or not later  ...
   const wsServer = new Server(8899, {
     connectTimeout: 45000, //The number of ms before disconnecting a client that has not successfully joined a namespace.
     // path: 'string', //this path must match in both the client and server, can be used for security stuff later.
@@ -21,60 +17,6 @@ export default function createWebSocketServer() {
     // pingTimeout: 20000, //how long to wait for a ping response
   });
 
-
-  wsServer.on('connection', socket => {
-    console.log('a user connected', socket.id);
-
-    socket.on('client-join', (clientName, _) => {
-      //send client name to host frontend ... mainWindow.webContents.send() ...
-      console.log('--- host received client name', clientName);
-    });
-
-    socket.on('client-add', (content, _) => {
-      console.log('client-add', content);
-      appendFile('test.txt', content, _ => {});
-    });
-
-    socket.on('client-del', (content, _) => {
-      console.log('client-del', content);
-      const numBytes = statSync('test.txt').size - Buffer.byteLength(content, 'utf8');
-      truncate('test.txt', numBytes, _ => {});
-    });
-
-    socket.on('client-diff', (patches, _) => {
-      latestText = DMP.patch_apply(patches, latestText)[0];
-      writeFile('test.txt', latestText, _ => {});
-    });
-
-  });
-
   return wsServer;
 }
 
-// const io = new Server()
-
-//-----------------------
-
-// const express = require('express');
-// const app = express();
-// const http = require('http');
-// const server = http.createServer(app);
-// const { Server } = require("socket.io");
-// const io = new Server(server);
-
-// io.on('connection', (socket) => {
-//   console.log('a user connected');
-// });
-
-// server.listen(3000, () => {
-//   console.log('listening on *:3000');
-// });
-
-//-----------------------
-
-// const io = require("socket.io");
-// const server = io.listen(3000);
-// server.on("connection", function(socket) {
-//   console.log("user connected");
-//   socket.emit("welcome", "welcome man");
-// });

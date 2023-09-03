@@ -1,36 +1,85 @@
 
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { reactive } from 'vue';
+import electronService from '/@/services/electronService';
+import ClientCard from '/@/components/shared/ClientCard.vue';
+import type { IClient } from '/@/services/clientService';
 
-const clients = ref(0);
+
+const clients = reactive<IClient[]>([]);
+
+electronService.onClientJoined((_, client) => {
+  console.log('on client joined from host', client.name);
+  clients.push(client);
+});
+
+
+electronService.onClientType((_, clientId, clientText) => {
+  console.log('recieved client text ...', clientId, clientText);
+  clients.forEach(client => {
+    if (client.uuid === clientId) {
+      client.content = clientText;
+    }
+  });
+});
+
+
+function tempAddClient() {
+  clients.push({
+    name: 'client_temp',
+    uuid: '',
+    content: 'testing temp client stuff',
+  });
+}
+
+function tempRemoveClient() {
+  clients.pop();
+}
+
 </script>
 
 <template>
   <!-- <p> -------------- host page -------------- </p> -->
   <div class="w-100 ma-4">
     <v-row
-      class="mb-6"
       no-gutters
+      class="clients-container"
     >
       <v-scale-transition :group="true">
         <v-col
-          v-for="n in clients"
-          :key="n"
-          style="min-width: 25%;"
+          v-for="client in clients"
+          :key="client.uuid"
+          class="client-card-container my-1"
         >
-          <v-sheet class="pa-2 ma-2">
-            Client {{ n }}
-          </v-sheet>
+          <client-card
+            :content="client.content"
+            :title="client.name"
+          >
+          </client-card>
         </v-col>
       </v-scale-transition>
     </v-row>
 
     <div class="d-flex align-center justify-center">
-      <v-btn @click="clients++"> + client </v-btn>
-      <v-btn @click="clients--"> - client </v-btn>
+      <v-btn @click="tempAddClient"> + client </v-btn>
+      <v-btn @click="tempRemoveClient"> - client </v-btn>
     </div>
   </div>
 </template>
 
-<style></style>
+<style>
+
+.clients-container {
+  max-height: calc(100vh - 8em);
+  overflow-y: auto;
+}
+
+.client-card-container {
+  /* max-height: calc(100vh - 10em); */
+  max-height: 40vh;
+  min-width: 25%;
+}
+
+
+</style>
 
