@@ -9,6 +9,10 @@ export default [
     component: HomePage,
   },
   {
+    path: '/CoCode',
+    component: HomePage,
+  },
+  {
     path: '/about',
     component: AboutPage,
   },
