@@ -1,4 +1,4 @@
-name: Build and Deploy
+name: Build and Deploy for Github Pages
 
 on:
   push:
@@ -25,7 +25,7 @@ jobs:
         run: npm run build:renderer 
 
       - name: Upload Build Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-pages-artifact@v2
         with:
           name: github-pages
           path: packages/renderer/dist
