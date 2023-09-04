@@ -126,9 +126,10 @@ export function getAddress(roomCode: string): string
 export function connectSocket(roomCode: string): Socket
 {
     const address = getAddress(roomCode);
-    const socket = IO(`ws://${address}:${PORT}`, {
+    const socket = IO(`wss://${address}:${PORT}`, {
       timeout: 15000,
-    });  //TODO: should it be https longpolling or ws or wss?
+      secure: true, //will use https and upgrade to wss
+    }); 
     return socket;
 }
 
