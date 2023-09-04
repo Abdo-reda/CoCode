@@ -4,6 +4,7 @@ import { reactive } from 'vue';
 import electronService from '/@/services/electronService';
 import ClientCard from '/@/components/shared/ClientCard.vue';
 import type { IClient } from '/@/services/clientService';
+import {getRoomCode} from '/@/services/webSocketService';
 
 
 const clients = reactive<IClient[]>([]);
@@ -36,6 +37,15 @@ function tempRemoveClient() {
   clients.pop();
 }
 
+function getRoom() {
+  return getRoomCode(electronService.getAddress()); //192.168.1.9
+}
+
+//TODO: see into this later ...
+function copyToClipboard() {
+  electronService.copyToClipboard(getRoom());
+}
+
 </script>
 
 <template>
@@ -60,9 +70,19 @@ function tempRemoveClient() {
       </v-scale-transition>
     </v-row>
 
-    <div class="d-flex align-center justify-center">
+    <div class="d-flex align-center justify-space-around">
       <v-btn @click="tempAddClient"> + client </v-btn>
       <v-btn @click="tempRemoveClient"> - client </v-btn>
+    </div>
+
+    <div class="text-center ma-4">
+      <v-btn
+        variant="text"
+        class="host-room font-weight-black text-disabled text-primary"
+        @click="copyToClipboard"
+      >
+        Host Room: {{ getRoom() }}
+      </v-btn>
     </div>
   </div>
 </template>
@@ -80,6 +100,8 @@ function tempRemoveClient() {
   min-width: 25%;
 }
 
-
+.host-room {
+  text-transform: unset !important;
+}
 </style>
 

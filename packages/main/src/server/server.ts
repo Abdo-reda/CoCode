@@ -1,4 +1,6 @@
 import {Server} from 'socket.io';
+// import { networkInterfaces  } from 'os';
+
 
 export default function createWebSocketServer() {
   
@@ -20,3 +22,20 @@ export default function createWebSocketServer() {
   return wsServer;
 }
 
+// export function getIpAddress () {
+
+//   // const nets = networkInterfaces();
+//   // const addresses = Object.create(null);
+//   // for (const name of Object.keys(nets)) {
+//   //   for (const net of nets[name] ?? []) {
+//   //       const familyV4Value = typeof net.family === 'string' ? 'IPv4' : 4
+//   //       if (net.family === familyV4Value && !net.internal) {
+//   //           if (!addresses[name]) {
+//   //             addresses[name] = [];
+//   //           }
+//   //           addresses[name].push(net.address);
+//   //       }
+//   //   }
+//   // }
+
+// }

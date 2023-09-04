@@ -30,7 +30,7 @@ function addressToIp(ipAddress: string): number
   segments.forEach((value, index) => {
     ip32Bit = ip32Bit | (value << 8*(3-index));
   });
-  return ip32Bit >>> 0;
+  return ip32Bit;
 }
 
 
@@ -65,7 +65,7 @@ function roomNumToIp(roomNumbers: number[]): number
   roomNumbers.forEach((value, index) => {
     ip32Bit = ip32Bit | (value << 6*(5-index));
   });
-  return ip32Bit >>> 0;
+  return ip32Bit;
 }
 
 

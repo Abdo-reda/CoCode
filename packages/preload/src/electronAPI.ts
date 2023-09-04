@@ -1,4 +1,6 @@
-import {type IpcRendererEvent, ipcRenderer} from 'electron';
+import {type IpcRendererEvent, ipcRenderer, clipboard} from 'electron';
+import { address } from 'ip';
+
 
 //find another way to disable eslint for any, too lazy to do this now.
 // eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any
@@ -23,5 +25,13 @@ export default class ElectronAPI {
 
   public onClientType(callback: ElectronCallbackFunc) {
     ipcRenderer.on('on-client-type', callback);
+  }
+
+  public getAddress() {
+    return address();
+  }
+
+  public copyToClipboard(text: string) {
+    clipboard.writeText(text);
   }
 }

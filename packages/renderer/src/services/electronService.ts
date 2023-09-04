@@ -22,4 +22,10 @@ export default {
   onClientType(callback: ElectronCallbackFunc) {
     window.ElectronAPI?.onClientType(callback);
   },
+  getAddress() {
+    return window.ElectronAPI?.getAddress();
+  },
+  copyToClipboard(text: string) {
+    return window.ElectronAPI?.copyToClipboard(text);
+  },
 };

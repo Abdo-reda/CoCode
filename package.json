@@ -32,6 +32,7 @@
   "devDependencies": {
     "@mdi/font": "^7.2.96",
     "@types/diff-match-patch": "^1.0.32",
+    "@types/ip": "^1.1.0",
     "@types/is-even": "^1.0.0",
     "@types/node": "18.17.11",
     "@types/uuid": "^9.0.3",
@@ -59,6 +60,7 @@
   "dependencies": {
     "diff-match-patch": "^1.0.5",
     "electron-updater": "6.1.1",
+    "ip": "^1.1.8",
     "simple-code-editor": "^2.0.8",
     "socket.io": "^4.7.2",
     "socket.io-client": "^4.7.2",

@@ -17,5 +17,7 @@ contextBridge.exposeInMainWorld('ElectronAPI', {
     hostServer: () => electronAPI.hostServer(),
     onClientJoined: (callback: ElectronCallbackFunc) => electronAPI.onClientJoined(callback),
     onClientType: (callback: ElectronCallbackFunc) => electronAPI.onClientType(callback),
+    getAddress: () => electronAPI.getAddress(),
+    copyToClipboard: (text :string) => electronAPI.copyToClipboard(text),
 });
   
