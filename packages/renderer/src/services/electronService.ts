@@ -8,6 +8,8 @@ declare global {
   }
 }
 
+
+//use provide and inject for dependency injection https://vuejs.org/api/composition-api-dependency-injection.html
 export default {
   isDesktop: window.ElectronAPI?.isDesktop,
   openNewWindow() {

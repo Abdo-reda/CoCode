@@ -4,7 +4,7 @@ import ClientEditor from '/@/components/shared/ClientEditor.vue';
 import { ref, watch } from 'vue';
 import {getClientSocket, clientRef} from '/@/services/webSocketService';
 import { diff_match_patch } from 'diff-match-patch';
-
+import { GetClientPeer } from '/@/services/webRTCService';
 
 defineProps({
     title: {
@@ -15,7 +15,8 @@ defineProps({
 
 const content = ref("console.log('hello client :)')");
 const dmp = new diff_match_patch();
-const socket = getClientSocket();
+// const socket = getClientSocket();
+const ClientPeer = GetClientPeer();
 
 
 
@@ -42,12 +43,23 @@ TODO:
 
 
 
-//-------------------- Approach #1 - diff-match-patch 
+// //-------------------- Approach #1 - diff-match-patch
+// watch(content, async (newContent, oldContent) => {
+//   oldContent = oldContent ?? '';
+//   const patches = dmp.patch_make(oldContent, newContent);
+//   // let patch = dmp.patch_toText(patches); //TODO: maybe send patch_toText directly, we will see, I might not use this approach at all
+//   socket?.emit('client-diff', clientRef.uuid, patches);
+// }, { immediate: true });
+
+//-------------------- Approach #2 - diff-match-patch with webRTC
 watch(content, async (newContent, oldContent) => {
   oldContent = oldContent ?? '';
-  const patches = dmp.patch_make(oldContent, newContent); 
+  const patches = dmp.patch_make(oldContent, newContent);
   // let patch = dmp.patch_toText(patches); //TODO: maybe send patch_toText directly, we will see, I might not use this approach at all
-  socket?.emit('client-diff', clientRef.uuid, patches);
+  ClientPeer.sendCode(patches);
+  //TODO: this is gonna be problamatic when there are multiple peers, my god such a headache.
+    //Probably multiple channels for each peer ... is that good?
+
 }, { immediate: true });
 
 </script>

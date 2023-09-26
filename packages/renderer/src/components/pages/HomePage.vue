@@ -1,23 +1,14 @@
 <script lang="ts" setup>
 import ClientForm from '/@/components/single/ClientForm.vue';
-import { ref, inject } from 'vue';
-import electronService from '/@/services/electronService';
-import { hostServer } from '/@/services/webSocketService';
-import { useRouter } from 'vue-router';
-import { ToastEvent } from '/@/events/keys';
+import HostForm from '/@/components/single/HostForm.vue';
+import { ref } from 'vue';
 
-// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any
-const toastEvent: any = inject(ToastEvent); //I will make it typesafe later .. https://logaretm.com/blog/type-safe-provide-inject/
-const router = useRouter();
-const hostPopup = ref(false);
+//TODO: add two methods, lan connection that uses webosckets and other connection that uses webRTC
+  //TODO: also add different view for host and client depending on which connection mode is made
+//Also, fix the organization and transitions ... why is there a host-form and client-form and can we fix this
+
+
 const clientPopup = ref(false);
-
-function host() {
-  hostServer();
-  toastEvent.showToast('Hosting Server...', 'info');
-  router.push({ path: 'host' });
-}
-
 
 function isMobile(): boolean {
   const toMatch = [
@@ -66,62 +57,7 @@ function isMobile(): boolean {
         v-if="!isMobile()"
         class="button-popup host-option d-flex flex-column align-center mx-8"
       >
-        <v-btn
-          v-if="electronService.isDesktop"
-          color="primary my-4"
-          class="text-background"
-          prepend-icon="mdi-server-plus"
-          @click="host()"
-        >
-          Host
-        </v-btn>
-
-        <v-btn
-          v-else
-          variant="tonal"
-          class="text-primary-darken-1 my-4"
-          prepend-icon="mdi-server-plus"
-          @click="hostPopup = !hostPopup;"
-        >
-          Host
-        </v-btn>
-        <v-fade-transition :hide-on-leave="true">
-          <v-card
-            v-if="hostPopup"
-            class="button-popup"
-            elevation="16"
-          >
-            <div class="ma-4">
-              <div class="text-center">
-                <div class="font-italic text-primary">Hosting can only be done on the Desktop App!</div>
-              </div>
-
-              <div class="d-flex align-center justify-center ma-1">
-                <v-btn
-                  variant="outlined"
-                  color="primary-darken-1"
-                  class="ma-1"
-                  icon="mdi-microsoft-windows"
-                  size="large"
-                ></v-btn>
-                <v-btn
-                  variant="outlined"
-                  color="primary-darken-1"
-                  class="ma-1"
-                  icon="mdi-linux"
-                  size="large"
-                ></v-btn>
-                <v-btn
-                  variant="outlined"
-                  color="primary-darken-1"
-                  class="ma-1"
-                  icon="mdi-apple"
-                  size="large"
-                ></v-btn>
-              </div>
-            </div>
-          </v-card>
-        </v-fade-transition>
+        <host-form> </host-form>
       </div>
       <!-- Client Option -->
       <div class="button-popup d-flex flex-column align-center mx-8">

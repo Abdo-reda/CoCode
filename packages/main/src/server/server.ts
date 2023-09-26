@@ -3,9 +3,9 @@ import {createServer} from 'https';
 import {readFileSync} from 'fs';
 // import { networkInterfaces  } from 'os';
 
-
+//use ngRok to host the server?
 export default function createWebSocketServer() {
-  
+
   const privateKey = readFileSync('certificates/key.pem', 'utf8'); //fs.readFileSync('key.pem', 'utf8');
   const certificate = readFileSync('certificates/cert.pem', 'utf8');
   const credentials = { key: privateKey, cert: certificate, passphrase: 'secure' };
@@ -18,7 +18,7 @@ export default function createWebSocketServer() {
       // serveClient: false,    //Whether to serve the client files, the default is true for some reason?.
       // allowRequest: () => {}, //this is a callback function that receives a given handshake or upgrade request as its first parameter, and can decide whether to continue or not.
       cors: {
-        origin: process.env.NODE_ENV === 'production' ? false : ['*'], //TODO: this is only for testing ... //http://localhost:5173  //https://abdo-reda.github.io/CoCode/
+        origin: ['https://abdo-reda.github.io'],// process.env.NODE_ENV === 'production' ? false : ['*'], //TODO: this is only for testing ... //http://localhost:5173  //https://abdo-reda.github.io/CoCode/
       }, //you can allow origins here, even allow stuff depending on whether production or development
       // maxHttpBufferSize: 1e6 (1MB), max data that can be sent in a single messege
       // pingInterval: 25000, //how often to ping the client
@@ -38,7 +38,7 @@ export default function createWebSocketServer() {
   return wsServer;
 }
 
-/* -------------- 
+/* --------------
 
 
 

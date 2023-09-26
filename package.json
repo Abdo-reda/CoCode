@@ -60,6 +60,7 @@
   "dependencies": {
     "diff-match-patch": "^1.0.5",
     "electron-updater": "6.1.1",
+    "firebase": "^10.3.1",
     "ip": "^1.1.8",
     "simple-code-editor": "^2.0.8",
     "socket.io": "^4.7.2",

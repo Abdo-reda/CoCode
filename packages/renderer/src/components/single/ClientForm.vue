@@ -1,28 +1,37 @@
 <script lang="ts" setup>
 import { ref, watch, inject  } from 'vue';
-import { connectClient, isConnected, connectError, clientRef } from '/@/services/webSocketService';
+// import { connectClient, isConnected, connectError, clientRef } from '/@/services/webSocketService';
+//should I use ref instead? global state management? PINIA
 import { useRouter } from 'vue-router';
 import {ToastEvent} from '/@/events/keys';
+import { GetClientPeer } from '/@/services/webRTCService';
 
 
 // hint="localhost is b#aaab"
 
 // eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any
+const ClientPeer = GetClientPeer();
 const toastEvent: any = inject(ToastEvent); //I will make it typesafe later .. https://logaretm.com/blog/type-safe-provide-inject/
 const router = useRouter();
 const hostRoom = ref('');
 const isLoading = ref(false);
 const isValidated = ref(false);
+const isConnected = ref(false);
+
+if (ClientPeer.connectionState.value === 'connected') clientJoined(); //Perserving state?
 
 
 const roomCodeRules = [
   (value: string) => {
-    if (value.length !== 6) {
-      return 'Room code must be 6 characters long';
+    // if (value.length !== 6) {
+    //   return 'Room code must be 6 characters long';
+    // }
+    if (!value) {
+      return 'Room code cannot be empty!';
     }
     return true;
   },
-]; 
+];
 
 const clinetNameRules = [
   (value: string) => {
@@ -37,34 +46,42 @@ const clinetNameRules = [
 ];
 
 
-watch(isConnected, (newValue, _) => {
-  if (newValue) {
+// watch(isConnected, (newValue, _) => {
+//   if (newValue) {
+//     clientJoined();
+//   }
+// });
+
+watch(ClientPeer.connectionState, (newValue, _) => {
+  toastEvent.showToast(`Client: ${newValue}`);
+  if (newValue === 'connected') {
+    isConnected.value = true;
     clientJoined();
   }
 });
 
 
-watch(connectError, (newValue, _) => {
-  if (newValue.error) {
-    isLoading.value = false;
-    toastEvent.showToast(`ERROR: ${newValue.message}.Client could not connect to Host. `, 'error');
-    connectError.error = false;
-    connectError.message = '';
-  }
-});
+// watch(connectError, (newValue, _) => {
+//   if (newValue.error) {
+//     isLoading.value = false;
+//     toastEvent.showToast(`ERROR: ${newValue.message}.Client could not connect to Host. `, 'error');
+//     connectError.error = false;
+//     connectError.message = '';
+//   }
+// });
 
 
 function clientJoined() {
   isLoading.value = false;
-  router.push({path: 'client'}); //should I use ref instead? global state management? 
-  isConnected.value = false;
+  router.push({path: 'client'});
 }
 
 
 function join() {
   console.log('attempting to join ...');
   isLoading.value = true;
-  connectClient(clientRef.name, hostRoom.value);
+  ClientPeer.joinRoom(hostRoom.value);
+  // connectClient(clientRef.name, hostRoom.value);
 }
 
 /*
@@ -108,7 +125,7 @@ function join() {
           color="primary-darken-1"
           label="Host Room"
           required
-          
+
           :rules="roomCodeRules"
         ></v-text-field>
 

@@ -19,7 +19,6 @@ provide(ToastEvent, {
   showToast,
 });
 
-
 </script>
 
 <template>
@@ -33,7 +32,7 @@ provide(ToastEvent, {
       <nav class="mx-4">
         <router-link to="/">Home</router-link> |
         <router-link to="/about">About</router-link> |
-        <router-link to="/host">Host</router-link> | 
+        <router-link to="/host">Host</router-link> |
         <router-link to="/client">Client</router-link> |
         <v-btn
           variant="text"
@@ -50,13 +49,13 @@ provide(ToastEvent, {
         <v-list-item title="Navigation drawer"></v-list-item>
       </v-list>
     </v-navigation-drawer> -->
- 
+
     <v-main class="d-flex flex-column align-center justify-center">
       <div class="main-container">
         <router-view> </router-view>
       </div>
     </v-main>
-    
+
     <toast-notification
       :show="toastShow"
       :color="toastColor"

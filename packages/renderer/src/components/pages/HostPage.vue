@@ -4,9 +4,13 @@ import { reactive } from 'vue';
 import electronService from '/@/services/electronService';
 import ClientCard from '/@/components/shared/ClientCard.vue';
 import type { IClient } from '/@/services/clientService';
-import {getRoomCode} from '/@/services/webSocketService';
+import { GetHostPeer } from '/@/services/webRTCService';
 
 
+const hostPeer = GetHostPeer();
+const roomId = await hostPeer.hostRoom();
+//TODO: implement loading for creating host,
+//TODO: also on unload should deal with it, the connection should remain, could try and use dependency injection.
 const clients = reactive<IClient[]>([]);
 
 electronService.onClientJoined((_, client) => {
@@ -37,13 +41,9 @@ function tempRemoveClient() {
   clients.pop();
 }
 
-function getRoom() {
-  return getRoomCode(electronService.getAddress()); //192.168.1.9
-}
-
-//TODO: see into this later ...
+//TODO: add toast notification that its copied.
 function copyToClipboard() {
-  electronService.copyToClipboard(getRoom());
+  electronService.copyToClipboard(roomId);
 }
 
 </script>
@@ -81,7 +81,7 @@ function copyToClipboard() {
         class="host-room font-weight-black text-disabled text-primary"
         @click="copyToClipboard"
       >
-        Host Room: {{ getRoom() }}
+        Host Room: {{ roomId }}
       </v-btn>
     </div>
   </div>
