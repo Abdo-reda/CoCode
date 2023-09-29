@@ -1,4 +1,4 @@
-import {node} from '../../.electron-vendors.cache.json';
+// import {node} from '../../.electron-vendors.cache.json';
 import {join} from 'node:path';
 import {injectAppVersion} from '../../version/inject-app-version-plugin.mjs';
 
@@ -21,7 +21,7 @@ const config = {
   build: {
     ssr: true,
     sourcemap: 'inline',
-    target: `node${node}`,
+    // target: `node${node}`,
     outDir: 'dist',
     assetsDir: '.',
     minify: process.env.MODE !== 'development',

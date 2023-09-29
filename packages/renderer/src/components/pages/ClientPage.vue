@@ -2,7 +2,7 @@
 <script lang="ts" setup>
 import ClientEditor from '/@/components/shared/ClientEditor.vue';
 import { ref, watch } from 'vue';
-import {getClientSocket, clientRef} from '/@/services/webSocketService';
+// import {getClientSocket, clientRef} from '/@/services/webSocketService';
 import { diff_match_patch } from 'diff-match-patch';
 import { GetClientPeer } from '/@/services/webRTCService';
 

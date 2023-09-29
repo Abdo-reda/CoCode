@@ -79,6 +79,10 @@ function clientJoined() {
 
 function join() {
   console.log('attempting to join ...');
+  //Todo: I should check here if room is 6 letters then its a local/websocket connection, otherwise its a webRTC connection
+  if (hostRoom.value.length === 6) {
+
+  }
   isLoading.value = true;
   ClientPeer.joinRoom(hostRoom.value);
   // connectClient(clientRef.name, hostRoom.value);

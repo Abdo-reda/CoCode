@@ -1,6 +1,6 @@
 /* eslint-env node */
 
-import {chrome} from '../../.electron-vendors.cache.json';
+// import {chrome} from '../../.electron-vendors.cache.json';
 import vue from '@vitejs/plugin-vue';
 import {renderer} from 'unplugin-auto-expose';
 import {join} from 'node:path';
@@ -31,7 +31,7 @@ const config = {
   },
   build: {
     sourcemap: true,
-    target: `chrome${chrome}`,
+    // target: `chrome${chrome}`,
     outDir: 'dist',
     assetsDir: '.',
     rollupOptions: {
@@ -49,7 +49,7 @@ const config = {
       preloadEntry: join(PACKAGE_ROOT, '../preload/src/index.ts'),
     }),
     injectAppVersion(),
-    vuetify(), 
+    vuetify(),
   ],
 };
 

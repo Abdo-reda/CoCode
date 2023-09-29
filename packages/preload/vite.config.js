@@ -1,4 +1,4 @@
-import {chrome} from '../../.electron-vendors.cache.json';
+// import {chrome} from '../../.electron-vendors.cache.json';
 import {preload} from 'unplugin-auto-expose';
 import {join} from 'node:path';
 import {injectAppVersion} from '../../version/inject-app-version-plugin.mjs';
@@ -17,7 +17,7 @@ const config = {
   build: {
     ssr: true,
     sourcemap: 'inline',
-    target: `chrome${chrome}`,
+    // target: `chrome${chrome}`,
     outDir: 'dist',
     assetsDir: '.',
     minify: process.env.MODE !== 'development',

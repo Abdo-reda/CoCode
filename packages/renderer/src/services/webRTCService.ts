@@ -32,20 +32,20 @@ const config = {
 
 // 'stun:stun.services.mozilla.com:3478',
 
-let hostPeerInstance: HostPeer|null = null;
-let clientPeerInstance: ClientPeer|null = null;
+let hostPeerInstance: HostPeerRTC|null = null;
+let clientPeerInstance: ClientPeerRTC|null = null;
 
-export function GetHostPeer(): HostPeer {
-  if (!hostPeerInstance) hostPeerInstance = new HostPeer();
+export function GetHostPeer(): HostPeerRTC {
+  if (!hostPeerInstance) hostPeerInstance = new HostPeerRTC();
   return hostPeerInstance;
 }
 
-export function GetClientPeer(): ClientPeer {
-  if (!clientPeerInstance) clientPeerInstance = new ClientPeer();
+export function GetClientPeer(): ClientPeerRTC {
+  if (!clientPeerInstance) clientPeerInstance = new ClientPeerRTC();
   return clientPeerInstance;
 }
 
-export class Peer {
+export class PeerRTC {
   public peerConnection = new RTCPeerConnection(config);
   protected codeChannel: any;
   public connectionState: Ref<string> = ref('');
@@ -117,7 +117,7 @@ export class Peer {
   }
 }
 
-export class HostPeer extends Peer {
+export class HostPeerRTC extends PeerRTC {
 
   constructor() {
     super();
@@ -181,7 +181,7 @@ export class HostPeer extends Peer {
 
 }
 
-export class ClientPeer extends Peer {
+export class ClientPeerRTC extends PeerRTC {
 
   constructor() {
     super();
