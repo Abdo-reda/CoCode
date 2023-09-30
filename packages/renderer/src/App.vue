@@ -5,6 +5,9 @@ import ToastNotification from '/@/components/shared/ToastNotification.vue';
 import { ToastEvent } from '/@/events/keys';
 import { ThemeInstance, useTheme } from 'vuetify'
 import { DestroyHost } from '/@/services/hostService';
+import { Repl } from '@vue/repl'
+import CodeMirror from '@vue/repl/codemirror-editor'
+import '@vue/repl/style.css'
 
 const theme: ThemeInstance = useTheme();
 const APP_VERSION = import.meta.env.VITE_APP_VERSION;
@@ -76,6 +79,8 @@ onBeforeUnmount(() => {
           prepend-icon="mdi-moon-waning-crescent" >
 
         </v-switch> -->
+
+        <!-- <Repl :editor="CodeMirror" /> -->
         <router-view> </router-view>
       </div>
     </v-main>
