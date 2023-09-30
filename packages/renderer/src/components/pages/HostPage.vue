@@ -3,42 +3,41 @@
 import { reactive } from 'vue';
 import electronService from '/@/services/electronService';
 import ClientCard from '/@/components/shared/ClientCard.vue';
-import type { IClient } from '/@/services/clientService';
-import { GetHostPeer } from '/@/services/webRTCService';
+import { GetHost } from '/@/services/hostService';
+import {v4 as uuidv4} from 'uuid';
 
+const hostPeer = GetHost(); //in theory, this can't be null
+const roomId = hostPeer?.roomId ?? 'no room id';
 
-const hostPeer = GetHostPeer();
-const roomId = await hostPeer.hostRoom();
-//TODO: implement loading for creating host,
-//TODO: also on unload should deal with it, the connection should remain, could try and use dependency injection.
-const clients = reactive<IClient[]>([]);
+//I will have a map, key is client uuid, and value is client object containing client name & content. That's all what I need.
+  //This map, will be in the Ihost, he will keep track of the clients connected non? when a client is disconnected, he removes it from the object, yest.
 
-electronService.onClientJoined((_, client) => {
-  console.log('on client joined from host', client.name);
-  clients.push(client);
-});
+//----------- Refactor this logic and see where it should be ... complexity demon enters the chat :) 
+// electronService.onClientJoined((_, client) => {
+//   console.log('on client joined from host', client.name);
+//   clients.push(client);
+// });
 
+// electronService.onClientType((_, clientId, clientText) => {
+//   console.log('recieved client text ...', clientId, clientText);
+//   clients.forEach(client => {
+//     if (client.uuid === clientId) {
+//       client.content = clientText;
+//     }
+//   });
+// });
 
-electronService.onClientType((_, clientId, clientText) => {
-  console.log('recieved client text ...', clientId, clientText);
-  clients.forEach(client => {
-    if (client.uuid === clientId) {
-      client.content = clientText;
-    }
-  });
-});
-
+let counter = 0;
 
 function tempAddClient() {
-  clients.push({
-    name: 'client_temp',
-    uuid: '',
-    content: 'testing temp client stuff',
+  hostPeer?.clientList.value.set(`client_temp_${counter}`, {
+    name: `client_temp_${counter++}`,
+    uuid: '', 
   });
 }
 
 function tempRemoveClient() {
-  clients.pop();
+  hostPeer?.clientList.value.delete(`client_temp_${--counter}`);
 }
 
 //TODO: add toast notification that its copied.
@@ -57,12 +56,11 @@ function copyToClipboard() {
     >
       <v-scale-transition :group="true">
         <v-col
-          v-for="client in clients"
-          :key="client.uuid"
+          v-for="[clientUUID, client] in hostPeer!.clientList.value" :key="clientUUID"
           class="client-card-container my-1"
         >
           <client-card
-            :content="client.content"
+            :content="hostPeer?.clientsContent.value.get(clientUUID)"
             :title="client.name"
           >
           </client-card>

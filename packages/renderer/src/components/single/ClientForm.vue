@@ -1,31 +1,27 @@
 <script lang="ts" setup>
-import { ref, watch, inject  } from 'vue';
-// import { connectClient, isConnected, connectError, clientRef } from '/@/services/webSocketService';
-//should I use ref instead? global state management? PINIA
+import { ref, watch, inject } from 'vue';
 import { useRouter } from 'vue-router';
-import {ToastEvent} from '/@/events/keys';
-import { GetClientPeer } from '/@/services/webRTCService';
+import { ToastEvent } from '/@/events/keys';
+import { GetClient, GetClientWebRTC, GetClientWebSockets } from '/@/services/clientService';
+import { IClient } from '/@/utils/interfaces/clientInterface';
 
 
 // hint="localhost is b#aaab"
 
 // eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any
-const ClientPeer = GetClientPeer();
 const toastEvent: any = inject(ToastEvent); //I will make it typesafe later .. https://logaretm.com/blog/type-safe-provide-inject/
 const router = useRouter();
-const hostRoom = ref('');
 const isLoading = ref(false);
 const isValidated = ref(false);
 const isConnected = ref(false);
 
-if (ClientPeer.connectionState.value === 'connected') clientJoined(); //Perserving state?
+let ClientPeer: IClient | null = GetClient();
+const clientName = ref(ClientPeer?.name ?? ''); //Does the name need to be reactive, I don't think so.
+const hostRoom = ref(ClientPeer?.roomId ?? '');
 
 
 const roomCodeRules = [
   (value: string) => {
-    // if (value.length !== 6) {
-    //   return 'Room code must be 6 characters long';
-    // }
     if (!value) {
       return 'Room code cannot be empty!';
     }
@@ -46,19 +42,13 @@ const clinetNameRules = [
 ];
 
 
-// watch(isConnected, (newValue, _) => {
-//   if (newValue) {
+// watch(ClientPeer.connectionState, (newValue, _) => {
+//   toastEvent.showToast(`Client: ${newValue}`);
+//   if (newValue === 'connected') {
+//     isConnected.value = true;
 //     clientJoined();
 //   }
 // });
-
-watch(ClientPeer.connectionState, (newValue, _) => {
-  toastEvent.showToast(`Client: ${newValue}`);
-  if (newValue === 'connected') {
-    isConnected.value = true;
-    clientJoined();
-  }
-});
 
 
 // watch(connectError, (newValue, _) => {
@@ -71,28 +61,39 @@ watch(ClientPeer.connectionState, (newValue, _) => {
 // });
 
 
-function clientJoined() {
+function clientJoined(): void {
   isLoading.value = false;
-  router.push({path: 'client'});
+  router.push({ path: 'client' });
 }
 
 
-function join() {
+function join(): void {
   console.log('attempting to join ...');
-  //Todo: I should check here if room is 6 letters then its a local/websocket connection, otherwise its a webRTC connection
-  if (hostRoom.value.length === 6) {
-
-  }
   isLoading.value = true;
-  ClientPeer.joinRoom(hostRoom.value);
-  // connectClient(clientRef.name, hostRoom.value);
+  if (ClientPeer && (ClientPeer.roomId === hostRoom.value)) {
+    ClientPeer.setInfo(clientName.value);
+    clientJoined();
+    // if (ClientPeer?.isConnected.value) clientJoined(); Does this condition matter?
+  }
+  
+  setupClient();
 }
 
-/*
-  TODO:
-    - validate input
-    -  emit an event when the client connects successfully and after it reroute to the client page.
-*/
+function setupClient(): void {
+
+  if (hostRoom.value.length === 6) {
+    ClientPeer = GetClientWebSockets();
+  } else {
+    ClientPeer = GetClientWebRTC();
+  }
+
+  ClientPeer!.setInfo(clientName.value);
+  ClientPeer!.joinRoom(hostRoom.value);
+
+  watch(ClientPeer!.isConnected, (newValue, _) => {
+    if (newValue) clientJoined();
+  });
+}
 
 </script>
 
@@ -104,44 +105,15 @@ function join() {
     </div>
 
     <div class="d-flex align-center justify-center ma-4">
-      <v-form
-        v-model="isValidated"
-        class="w-100 d-flex flex-column align-center"
-        @submit.prevent
-      >
-        <v-text-field
-          v-model="clientRef.name"
-          class="w-100"
-          variant="filled"
-          base-color="secondary-darken-1"
-          density="compact"
-          color="secondary-darken-1"
-          label="Client Name"
-          :rules="clinetNameRules"
-        ></v-text-field>
+      <v-form v-model="isValidated" class="w-100 d-flex flex-column align-center" @submit.prevent>
+        <v-text-field v-model="clientName" class="w-100" variant="filled" base-color="secondary-darken-1"
+          density="compact" color="secondary-darken-1" label="Client Name" :rules="clinetNameRules"></v-text-field>
 
-        <v-text-field
-          v-model="hostRoom"
-          class="w-100"
-          variant="filled"
-          base-color="primary-darken-1"
-          density="compact"
-          color="primary-darken-1"
-          label="Host Room"
-          required
+        <v-text-field v-model="hostRoom" class="w-100" variant="filled" base-color="primary-darken-1" density="compact"
+          color="primary-darken-1" label="Host Room" required :rules="roomCodeRules"></v-text-field>
 
-          :rules="roomCodeRules"
-        ></v-text-field>
-
-        <v-btn
-          :disabled="!isValidated"
-          :loading="isLoading"
-          variant="outlined"
-          size="small"
-          color="secondary"
-          type="submit"
-          @click="join()"
-        >
+        <v-btn :disabled="!isValidated" :loading="isLoading" variant="outlined" size="small" color="secondary"
+          type="submit" @click="join()">
           Join
         </v-btn>
       </v-form>

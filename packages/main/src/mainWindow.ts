@@ -1,6 +1,6 @@
 import {app, BrowserWindow, ipcMain} from 'electron';
 import {join, resolve} from 'node:path';
-import createWebSocketServer from '/@/server/server';
+import createWebSocketServer from './server/wsServer';
 import type {Server} from 'socket.io';
 import {writeFile, appendFile, truncate, statSync } from 'node:fs';
 import {diff_match_patch} from 'diff-match-patch';

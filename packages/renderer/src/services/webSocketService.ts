@@ -2,9 +2,10 @@ import type {Socket} from 'socket.io-client';
 import IO from 'socket.io-client';
 import {ref, reactive} from 'vue';
 import electronService from './electronService';
-import type {IClient} from './clientService';
-import {newClient} from './clientService';
+import type {IClient} from '/@/utils/interfaces/clientInterface';
+// import {newClient} from './clientService';
 import { v4 as uuidv4 } from 'uuid';
+import { IHost } from '/@/utils/interfaces/hostInterface';
 
 
 const lowerAlphabet = Array.from({length: 26}, (_, i) => String.fromCharCode(97 + i));
@@ -65,6 +66,12 @@ function ipToAddress(ip32Bit: number): string {
   return address;
 }
 
+export const isConnected = ref(false);
+export const connectError = reactive({
+  error: false,
+  message: '',
+});
+
 
 /**
  * Gets the room code from a given ip address.
@@ -93,30 +100,41 @@ export function getAddress(roomCode: string): string {
   return address;
 }
 
-class HostPeerWS {
+export class HostPeerWS implements IHost {
 
-  public hostServer() {
+  name: string = 'Host';
+  roomId: string = '';
+  isHosting: boolean = false;
+
+  public async hostRoom(): Promise<string> {
     //TODO: if the host is already hosting, then there is no need to host again.
+    //FIX THIS TO MAKE AN ASYNC FUNCTION !! don't forget to try and catch
     electronService.hostServer();
+    return 'temp'; 
+  }
+
+  public destroy(): void {
+    // electronService.closeServer();
+    // do other stuff to close the connection and clean yourself up BOY!
   }
 }
 
 
-
-class ClientPeerWS {
+//TODO: fix later, make it implements IClient
+export class ClientPeerWS {
 
   clientSocket: Socket = IO(); //Dummy Socket or null? can I use the same socket object to connect to another port or http?
-  private PORT = 8899;
-  isConnected = ref(false);
+  isConnected: boolean = false;
+  name: string = '';
+  uuid: string = '';
   connectError = reactive({
     error: false,
     message: '',
   });
-
-  clientInfo: IClient = {
-    name: '',
-    uuid: '',
-  };
+  
+  
+  private PORT = 8899;
+  
 
   constructor() {}
 
@@ -127,7 +145,7 @@ class ClientPeerWS {
    * @param roomCode : string
    * @returns
    */
-  public connect(clientName: string, roomCode: string): Socket {
+  public async connect(clientName: string, roomCode: string): Socket {
     this.setInfo(clientName);
     this.clientSocket = this.connectSocket(roomCode);
     //Subscribe to the socket events, however

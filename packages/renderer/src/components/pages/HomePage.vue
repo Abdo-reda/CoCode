@@ -89,7 +89,7 @@ function isMobile(): boolean {
 
 .button-popup {
   width: 100%;
-  max-width: 16rem;
+  max-width: 24rem;
 }
 </style>
 

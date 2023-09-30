@@ -30,7 +30,7 @@ watch(() => props.show, (newValue, _) => {
 <template>
   <v-snackbar
     v-model="isShowing"
-    timeout="3000"
+    timeout="1500"
     :color="color"
     variant="tonal"
     position="relative"

@@ -4,7 +4,13 @@ import ClientEditor from '/@/components/shared/ClientEditor.vue';
 import { ref, watch } from 'vue';
 // import {getClientSocket, clientRef} from '/@/services/webSocketService';
 import { diff_match_patch } from 'diff-match-patch';
-import { GetClientPeer } from '/@/services/webRTCService';
+import { GetClient } from '/@/services/clientService';
+
+/*
+TODO:
+  - add option to change things like font-size, theme, ..
+  - add a toggle option for host view and client view (if a client wants to see other clients and host, we can build on top of that, can only see host or can only see clietns and permissions and so on .. )
+  */
 
 defineProps({
     title: {
@@ -13,19 +19,15 @@ defineProps({
     },
 });
 
+const dmpInstance = new diff_match_patch(); //TODO: make this a global instance using provide/inject and stuff like that.
 const content = ref("console.log('hello client :)')");
-const dmp = new diff_match_patch();
 // const socket = getClientSocket();
-const ClientPeer = GetClientPeer();
+const ClientPeer = GetClient(); //in theory, this can't be null
 
 
 
 
 
-/*
-TODO:
-  - add option to change things like font-size, theme, ..
-*/
 
 //---------------------- Approach #2 - manual diff
 // function calcDiff(newContent: string, oldContent: string) {
@@ -54,9 +56,10 @@ TODO:
 //-------------------- Approach #2 - diff-match-patch with webRTC
 watch(content, async (newContent, oldContent) => {
   oldContent = oldContent ?? '';
-  const patches = dmp.patch_make(oldContent, newContent);
+  console.log('----- diff', newContent, oldContent);
+  const patches = dmpInstance.patch_make(oldContent, newContent);
   // let patch = dmp.patch_toText(patches); //TODO: maybe send patch_toText directly, we will see, I might not use this approach at all
-  ClientPeer.sendCode(patches);
+  ClientPeer?.sendCode(dmpInstance.patch_toText(patches));
   //TODO: this is gonna be problamatic when there are multiple peers, my god such a headache.
     //Probably multiple channels for each peer ... is that good?
 
@@ -69,7 +72,7 @@ watch(content, async (newContent, oldContent) => {
   <div class="client-page w-100 pa-2">
     <client-editor
       v-model:content="content"
-      :title="clientRef.name"
+      :title="ClientPeer?.name"
     >
     </client-editor>
   </div>

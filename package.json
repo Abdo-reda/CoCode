@@ -1,7 +1,7 @@
 {
   "name": "co_code",
   "description": "Interactive Coop Coding aimed For Educational purposes",
-  "version": "1.0.0",
+  "version": "0.1.5",
   "private": true,
   "author": {
     "email": "abdo.reda@aucegypt.edu",
@@ -20,7 +20,8 @@
     "test:main": "vitest run -r packages/main --passWithNoTests",
     "test:preload": "vitest run -r packages/preload --passWithNoTests",
     "test:renderer": "vitest run -r packages/renderer --passWithNoTests",
-    "watch": "bun scripts/watch.mjs",
+    "npm:watch": "node scripts/watch.mjs",
+    "bun:watch": "bun scripts/watch.mjs",
     "lint": "eslint . --ext js,mjs,cjs,ts,mts,cts,vue",
     "typecheck:main": "tsc --noEmit -p packages/main/tsconfig.json",
     "typecheck:preload": "tsc --noEmit -p packages/preload/tsconfig.json",
