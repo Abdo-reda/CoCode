@@ -3,18 +3,14 @@ import { provide, ref, watch, onBeforeUnmount } from 'vue';
 import electronService from '/@/services/electronService';
 import ToastNotification from '/@/components/shared/ToastNotification.vue';
 import { ToastEvent } from '/@/events/keys';
-import { ThemeInstance, useTheme } from 'vuetify'
+import { ThemeInstance, useTheme } from 'vuetify';
 import { DestroyHost } from '/@/services/hostService';
-import { Repl } from '@vue/repl'
-import CodeMirror from '@vue/repl/codemirror-editor'
-import '@vue/repl/style.css'
 
 const theme: ThemeInstance = useTheme();
 const APP_VERSION = import.meta.env.VITE_APP_VERSION;
 const toastShow = ref(false);
 const toastText = ref('');
 const toastColor = ref('info');
-const darkTheme = ref(false);
 
 function showToast(text: string, color: string) {
   toastShow.value = true;
@@ -25,10 +21,6 @@ function showToast(text: string, color: string) {
 function toggleTheme() {
   theme.global.name.value = theme.global.current.value.dark ? 'light' : 'dark'
 }
-
-watch(darkTheme, (newVal) => {
-  toggleTheme();
-});
 
 //shouldn't be a plugin and a global object?
 provide(ToastEvent, {
@@ -75,12 +67,11 @@ onBeforeUnmount(() => {
 
     <v-main class="d-flex flex-column align-center justify-center">
       <div class="main-container">
-        <!-- <v-switch v-model="darkTheme" append-icon="mdi-white-balance-sunny" density="compact"
-          prepend-icon="mdi-moon-waning-crescent" >
+        <!-- <v-switch @change="toggleTheme()" true-icon="mdi-white-balance-sunny" density="compact"
+          false-icon="mdi-moon-waning-crescent" >
 
         </v-switch> -->
 
-        <!-- <Repl :editor="CodeMirror" /> -->
         <router-view> </router-view>
       </div>
     </v-main>

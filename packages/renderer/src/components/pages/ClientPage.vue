@@ -13,10 +13,10 @@ TODO:
   */
 
 defineProps({
-    title: {
-        type: String,
-        default: '',
-    },
+  title: {
+    type: String,
+    default: '',
+  },
 });
 
 const dmpInstance = new diff_match_patch(); //TODO: make this a global instance using provide/inject and stuff like that.
@@ -61,7 +61,7 @@ watch(content, async (newContent, oldContent) => {
   // let patch = dmp.patch_toText(patches); //TODO: maybe send patch_toText directly, we will see, I might not use this approach at all
   ClientPeer?.sendCode(dmpInstance.patch_toText(patches));
   //TODO: this is gonna be problamatic when there are multiple peers, my god such a headache.
-    //Probably multiple channels for each peer ... is that good?
+  //Probably multiple channels for each peer ... is that good?
 
 }, { immediate: true });
 
@@ -75,14 +75,13 @@ watch(content, async (newContent, oldContent) => {
       :title="ClientPeer?.name"
     >
     </client-editor>
+
   </div>
 </template>
 
 <style>
-
 .client-page {
-  max-height:  calc(100vh - 6em);
+  max-height: calc(100vh - 6em);
 }
-
 </style>
 
