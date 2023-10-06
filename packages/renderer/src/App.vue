@@ -5,12 +5,14 @@ import ToastNotification from '/@/components/shared/ToastNotification.vue';
 import { ToastEvent } from '/@/events/keys';
 import { ThemeInstance, useTheme } from 'vuetify';
 import { DestroyHost } from '/@/services/hostService';
+import Chat from '/@/components/single/Chat.vue';
 
 const theme: ThemeInstance = useTheme();
 const APP_VERSION = import.meta.env.VITE_APP_VERSION;
 const toastShow = ref(false);
 const toastText = ref('');
 const toastColor = ref('info');
+const drawer = ref(false);
 
 function showToast(text: string, color: string) {
   toastShow.value = true;
@@ -35,80 +37,67 @@ onBeforeUnmount(() => {
 
 <template>
   <v-app>
-    <v-app-bar density="compact" height="2em" class="toolbar">
-      <!-- Temp Nav for testing  -->
-      <nav class="mx-4">
-        <router-link to="/">Home</router-link> |
-        <router-link to="/about">About</router-link> |
-        <router-link to="/host">Host</router-link> |
-        <router-link to="/client">Client</router-link> |
-        <v-btn variant="text" size="small" @click="electronService.openNewWindow()">
-          New Window
-        </v-btn>
-      </nav>
-      <div>
-
-        <!-- <v-switch v-model="darkTheme">
-          <template v-slot:label>
-            Turn on the progress:
-            <v-progress-circular :indeterminate="darkTheme" size="24" class="ms-2"></v-progress-circular>
-          </template>
-        </v-switch> -->
+    <v-app-bar class="toolbar" color="transparent">
+      <div class="ma-4 toolbar-contents">
+        <v-row> 
+          <nav class="mx-4 d-flex align-center">
+            <router-link to="/">Home</router-link> |
+            <router-link to="/about">About</router-link> |
+            <router-link to="/host">Host</router-link> |
+            <router-link to="/client">Client</router-link> |
+    
+            <div>
+              <v-btn variant="text" size="small" @click="electronService.openNewWindow()">
+                New Window
+              </v-btn>
+            </div>
+          </nav>
+        </v-row>
+        <v-row justify="end">
+            <v-btn @click.stop="drawer = !drawer" variant="text" size="x-small" icon="mdi-message-text"> </v-btn>
+        </v-row>
       </div>
-
     </v-app-bar>
 
 
-    <!-- <v-navigation-drawer>
-       <v-list>
-        <v-list-item title="Navigation drawer"></v-list-item>
-      </v-list>
-    </v-navigation-drawer> -->
+
+
+
+    <v-navigation-drawer v-model="drawer" location="right">
+      <chat> </chat>
+    </v-navigation-drawer>
+
+
 
     <v-main class="d-flex flex-column align-center justify-center">
-      <div class="main-container">
-        <!-- <v-switch @change="toggleTheme()" true-icon="mdi-white-balance-sunny" density="compact"
-          false-icon="mdi-moon-waning-crescent" >
-
-        </v-switch> -->
-
-        <router-view> </router-view>
-      </div>
+      <router-view> </router-view>
     </v-main>
 
     <toast-notification :show="toastShow" :color="toastColor" :text="toastText">
     </toast-notification>
 
-    <v-footer class="app-footer flex-0-0 pa-0" :app="true">
-      <p class="text-overline font-italic text-disabled pa-1">
-        V-{{ APP_VERSION }}
-      </p>
+    <v-footer class="pa-0 d-flex justify-space-between" app>
+      <div class="mx-2">
+        <p class="text-overline font-italic text-disabled">
+          V-{{ APP_VERSION }}
+        </p>
+      </div>
+
     </v-footer>
   </v-app>
 </template>
 
 <style>
-#app {
+/* #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /* text-align: center;
+  text-align: center;
   color: #2c3e50;
   margin: 60px auto;
-  max-width: 700px; */
-}
-
-.main-container {
-  height: 100%;
-  width: 100%;
-  max-width: 100%;
-  max-height: 100%;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
+  max-width: 700px; 
+} 
+*/
 
 /* .main-container {
   height: 100%;
@@ -122,18 +111,23 @@ onBeforeUnmount(() => {
   justify-content: center;
 } */
 
-nav {
-  -webkit-app-region: no-drag;
-}
+/* .main-container {
+  height: 100%;
+  width: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+} */
 
-.app-footer {
-  border: 1px solid #373737 !important;
-  height: 1.5em;
+.toolbar-contents {
+  -webkit-app-region: no-drag;
 }
 
 .toolbar {
   -webkit-app-region: drag;
-  border: 1px solid #373737 !important;
-  height: 2em;
 }
 </style>

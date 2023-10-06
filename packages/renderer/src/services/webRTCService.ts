@@ -72,7 +72,7 @@ export class HostPeerRTC extends PeerRTC implements IHost {
   isHosting: boolean = false;
   
   clientList: Ref<Map<string, IClientInfo>> = ref(new Map()); //NO NEED TO HAVE TWO DIFFERNT MAPS, also no need to have uuid as the clientInfo, but its f
-  clientsContent: Ref<Map<string, string>> = ref(new Map());
+  clientsCode: Ref<Map<string, string>> = ref(new Map());
   
   peerConnectionList: RTCPeerConnection[] = [];
   codeChannelsList: RTCDataChannel[] = [];
@@ -176,9 +176,9 @@ export class HostPeerRTC extends PeerRTC implements IHost {
       console.log('---- receiving data:', event.data);
       console.log(event);
       let patches = dmpInstance.patch_fromText(event.data);
-      this.clientsContent.value.set(
+      this.clientsCode.value.set(
         clientUUID,
-        dmpInstance.patch_apply(patches, this.clientsContent.value.get(clientUUID) ?? '')[0],
+        dmpInstance.patch_apply(patches, this.clientsCode.value.get(clientUUID) ?? '')[0],
       );
     };
 

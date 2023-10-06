@@ -1,10 +1,8 @@
 
 <script lang="ts" setup>
-import { reactive } from 'vue';
 import electronService from '/@/services/electronService';
 import ClientCard from '/@/components/shared/ClientCard.vue';
 import { GetHost } from '/@/services/hostService';
-import {v4 as uuidv4} from 'uuid';
 
 const hostPeer = GetHost(); //in theory, this can't be null
 const roomId = hostPeer?.roomId ?? 'no room id';
@@ -60,7 +58,7 @@ function copyToClipboard() {
           class="client-card-container my-1"
         >
           <client-card
-            :content="hostPeer?.clientsContent.value.get(clientUUID)"
+            :content="hostPeer?.clientsCode.value.get(clientUUID)"
             :title="client.name"
           >
           </client-card>

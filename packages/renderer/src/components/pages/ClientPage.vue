@@ -70,6 +70,7 @@ watch(content, async (newContent, oldContent) => {
 
 <template>
   <div class="client-page w-100 pa-2">
+
     <client-editor
       v-model:content="content"
       :title="ClientPeer?.name"
