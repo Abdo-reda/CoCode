@@ -1,9 +1,10 @@
 <script lang="ts" setup>
-import { provide, ref, watch, onBeforeUnmount } from 'vue';
+import { provide, ref, onBeforeUnmount } from 'vue';
 import electronService from '/@/services/electronService';
 import ToastNotification from '/@/components/shared/ToastNotification.vue';
-import { ToastEvent } from '/@/events/keys';
-import { ThemeInstance, useTheme } from 'vuetify';
+import { ToastEvent } from '/@/utils/symbols/keys';
+import type { ThemeInstance} from 'vuetify';
+import { useTheme } from 'vuetify';
 import { DestroyHost } from '/@/services/hostService';
 
 const theme: ThemeInstance = useTheme();
@@ -12,14 +13,14 @@ const toastShow = ref(false);
 const toastText = ref('');
 const toastColor = ref('info');
 
-function showToast(text: string, color: string) {
+function showToast(text: string, color: string): void {
   toastShow.value = true;
   toastText.value = text;
   toastColor.value = color;
 }
 
 function toggleTheme() {
-  theme.global.name.value = theme.global.current.value.dark ? 'light' : 'dark'
+  theme.global.name.value = theme.global.current.value.dark ? 'light' : 'dark';
 }
 
 //shouldn't be a plugin and a global object?
@@ -136,4 +137,4 @@ nav {
   border: 1px solid #373737 !important;
   height: 2em;
 }
-</style>
+</style>./utils/symbols/keys

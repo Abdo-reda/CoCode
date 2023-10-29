@@ -1,13 +1,13 @@
-import { HostPeerRTC } from './webRTCService';
+import { HostPeerRTC } from '/@/services/WebRTC/webRTCHostPeer';
 import { HostPeerWS } from './webSocketService';
-import { IHost } from '/@/utils/interfaces/hostInterface'
+import { type IHost } from '/@/utils/interfaces/hostInterface'
 
-let hostWebRTC: HostPeerRTC | null = null;
-let hostWebSockets: HostPeerWS | null = null;
+let hostRTCInstance: HostPeerRTC | null = null;
+let hostWSInstance: HostPeerWS | null = null;
 
 
 export function GetHost(): IHost | null {
-    return hostWebRTC ?? hostWebSockets; 
+    return hostRTCInstance ?? hostWSInstance;
 }
 
 /**
@@ -15,13 +15,13 @@ export function GetHost(): IHost | null {
  * @returns IHost
  */
 export function GetHostWebRTC(): IHost {
-    if (hostWebRTC) return hostWebRTC;
-    if (hostWebSockets) {
-        hostWebSockets.destroy();
-        hostWebSockets = null;
+    if (hostRTCInstance) return hostRTCInstance;
+    if (hostWSInstance) {
+        hostWSInstance.destroy();
+        hostWSInstance = null;
     }
-    hostWebRTC = new HostPeerRTC();
-    return hostWebRTC;
+    hostRTCInstance = new HostPeerRTC();
+    return hostRTCInstance;
 }
 
 /**
@@ -29,22 +29,22 @@ export function GetHostWebRTC(): IHost {
  * @returns IHost
  */
 export function GetHostWebSockets(): IHost {
-    if (hostWebSockets) return hostWebSockets;
-    if (hostWebRTC) {
-        hostWebRTC.destroy();
-        hostWebRTC = null;
+    if (hostWSInstance) return hostWSInstance;
+    if (hostRTCInstance) {
+        hostRTCInstance.destroy();
+        hostRTCInstance = null;
     }
-    hostWebSockets = new HostPeerWS();
-    return hostWebSockets
+    hostWSInstance = new HostPeerWS();
+    return hostWSInstance;
 }
 
 export function DestroyHost(): void {
-    if (hostWebRTC) {
-        hostWebRTC.destroy();
-        hostWebRTC = null;
+    if (hostRTCInstance) {
+        hostRTCInstance.destroy();
+        hostRTCInstance = null;
     }
-    if (hostWebSockets) {
-        hostWebSockets.destroy();
-        hostWebSockets = null;
+    if (hostWSInstance) {
+        hostWSInstance.destroy();
+        hostWSInstance = null;
     }
 }

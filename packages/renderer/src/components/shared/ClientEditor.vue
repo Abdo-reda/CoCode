@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import CodeEditor from 'simple-code-editor/CodeEditor.vue';
+import {supportedLanguagesMap, supportedLanguages} from '/@/utils/enums/supportedLanguagesEnum';
 import { ref, onMounted } from 'vue';
 
 
@@ -19,14 +20,16 @@ const props = defineProps({
 });
 
 
-//appearently I don't need this?
-defineEmits<{
+//TODO: appearently I don't need this? make this better //of course I need this, what the fuck am I on about?
+const emits = defineEmits<{
   'update:content': [content: string]
+  'execute': [lang: supportedLanguages]
 }>();
-  
-const orgEditorRef = ref<InstanceType<typeof CodeEditor> | null>(null);
- 
 
+const orgEditorRef = ref<InstanceType<typeof CodeEditor> | null>(null);
+const curLanguage = ref<supportedLanguages>(supportedLanguages.JAVASCRIPT);
+
+//TODO: this is really awful, why would I do this, I could have easily forked the package and changed it to include name. I still want to include an execute button.
 onMounted(() => {
   const orgEditor = orgEditorRef.value;
   const headerElement = orgEditor!.$el.querySelector('.header');
@@ -35,11 +38,20 @@ onMounted(() => {
   headerElement.appendChild(paragraph);
 });
 
+function onLanguageChange(selectedLanguage: supportedLanguages): void {
+  console.log('---- language', selectedLanguage);
+  curLanguage.value = selectedLanguage;
+}
+
+function executeCode(): void {
+  emits('execute', curLanguage.value);
+}
 
 </script>
 
 <template>
   <div class="editor-container w-100">
+    <v-btn @click="executeCode()"> Execute Me please </v-btn>
     <CodeEditor
       ref="orgEditorRef"
       :model-value="content"
@@ -48,13 +60,14 @@ onMounted(() => {
       theme="stackoverflow-dark"
       font-size="14px"
       :read-only="false"
-      :languages="[['javascript', 'JS'], ['cpp', 'C++'], ['python', 'Python'], ['php', 'PHP']]"
+      :languages="Array.from(supportedLanguagesMap.entries())"
       @input="$emit('update:content', ($event.target as HTMLInputElement).value)"
+      @lang="onLanguageChange"
     >
     </CodeEditor>
   </div>
 </template>
-  
+
 <style>
 .editor-container {
   max-height: inherit;
@@ -92,4 +105,3 @@ onMounted(() => {
 }
 
 </style>
-  

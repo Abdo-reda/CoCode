@@ -1,14 +1,14 @@
 import { v4 as uuidv4 } from 'uuid';
 import { reactive } from 'vue';
-import { ClientPeerRTC } from './webRTCService';
+import { ClientPeerRTC } from '/@/services/WebRTC/webRTCClientPeer';
 import { ClientPeerWS } from './webSocketService';
-import { IClient } from '/@/utils/interfaces/clientInterface'
+import { type IClient } from '/@/utils/interfaces/clientInterface'
 
 let clientWebRTC: ClientPeerRTC | null = null;
 let clientWebSockets: ClientPeerRTC | null = null; //TODO: change to ClientPeerWS
 
 export function GetClient(): IClient | null {
-    return clientWebRTC ?? clientWebSockets; 
+    return clientWebRTC ?? clientWebSockets;
 }
 
 /**

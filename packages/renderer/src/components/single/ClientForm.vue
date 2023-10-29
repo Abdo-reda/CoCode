@@ -1,15 +1,15 @@
 <script lang="ts" setup>
 import { ref, watch, inject } from 'vue';
 import { useRouter } from 'vue-router';
-import { ToastEvent } from '/@/events/keys';
+import { ToastEvent } from '/@/utils/symbols/keys';
 import { GetClient, GetClientWebRTC, GetClientWebSockets } from '/@/services/clientService';
-import { IClient } from '/@/utils/interfaces/clientInterface';
+import type { IClient } from '/@/utils/interfaces/clientInterface';
 
 
 // hint="localhost is b#aaab"
 
 // eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any
-const toastEvent: any = inject(ToastEvent); //I will make it typesafe later .. https://logaretm.com/blog/type-safe-provide-inject/
+const toastEvent = inject(ToastEvent); //I will make it typesafe later .. https://logaretm.com/blog/type-safe-provide-inject/
 const router = useRouter();
 const isLoading = ref(false);
 const isValidated = ref(false);
@@ -75,7 +75,7 @@ function join(): void {
     clientJoined();
     // if (ClientPeer?.isConnected.value) clientJoined(); Does this condition matter?
   }
-  
+
   setupClient();
 }
 
@@ -121,3 +121,4 @@ function setupClient(): void {
   </v-card>
 </template>
 
+../../utils/symbols/keys

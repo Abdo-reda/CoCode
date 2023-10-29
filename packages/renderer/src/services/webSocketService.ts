@@ -110,7 +110,7 @@ export class HostPeerWS implements IHost {
     //TODO: if the host is already hosting, then there is no need to host again.
     //FIX THIS TO MAKE AN ASYNC FUNCTION !! don't forget to try and catch
     electronService.hostServer();
-    return 'temp'; 
+    return 'temp';
   }
 
   public destroy(): void {
@@ -131,10 +131,10 @@ export class ClientPeerWS {
     error: false,
     message: '',
   });
-  
-  
+
+
   private PORT = 8899;
-  
+
 
   constructor() {}
 

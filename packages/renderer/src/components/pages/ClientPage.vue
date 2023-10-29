@@ -5,6 +5,7 @@ import { ref, watch } from 'vue';
 // import {getClientSocket, clientRef} from '/@/services/webSocketService';
 import { diff_match_patch } from 'diff-match-patch';
 import { GetClient } from '/@/services/clientService';
+import { supportedLanguages } from '/@/utils/enums/supportedLanguagesEnum';
 
 /*
 TODO:
@@ -20,7 +21,7 @@ defineProps({
 });
 
 const dmpInstance = new diff_match_patch(); //TODO: make this a global instance using provide/inject and stuff like that.
-const content = ref("console.log('hello client :)')");
+const content = ref("console.log('hello client :)')"); //TODO: save as a constant.
 // const socket = getClientSocket();
 const ClientPeer = GetClient(); //in theory, this can't be null
 
@@ -65,14 +66,21 @@ watch(content, async (newContent, oldContent) => {
 
 }, { immediate: true });
 
+function executeClientCode(lang: supportedLanguages):void {
+  ClientPeer?.executeCode(lang);
+}
+
 </script>
 
 
 <template>
   <div class="client-page w-100 pa-2">
+    <!-- TODO: should make this take the full height by default,  -->
+    <!-- should add a toolbar for the client here, options and settings and stuff specific to the client. -->
     <client-editor
       v-model:content="content"
       :title="ClientPeer?.name"
+      @execute="executeClientCode"
     >
     </client-editor>
 

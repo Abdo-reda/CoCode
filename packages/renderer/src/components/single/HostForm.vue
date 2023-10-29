@@ -1,13 +1,13 @@
 <script lang="ts" setup>
 import electronService from '/@/services/electronService';
-import { ToastEvent } from '/@/events/keys';
+import { ToastEvent } from '/@/utils/symbols/keys';
 import { useRouter } from 'vue-router';
 import { ref, inject } from 'vue';
 // import { hostServer } from '/@/services/webSocketService';
 import { GetHostWebSockets, GetHostWebRTC } from '/@/services/hostService';
 
 /* TODO:
-  - Does the host have a freaking name? should there be a form for that.... 
+  - Does the host have a freaking name? should there be a form for that....
   - Later, there could be a settings page for the host, what are the allowed languages, what are the allowed views and so on, to manage the room settinsg basically.
   - Implement local hosting ... use microsockets :) <3
 */
@@ -73,7 +73,7 @@ function hostErrorHandler(err: Error) {
         <div class="text-center ma-4">
           <p class="font-italic text-primary">Choose your hosting method!</p>
         </div>
-        
+
         <div class="d-flex align-center justify-center">
           <v-btn @click="hostOnline()" :loading="isOnlineHosting" color="primary" :disabled="isLocalHosting" class="text-background ma-2" variant="outlined" prepend-icon="mdi-wan">
             Online
@@ -127,3 +127,4 @@ function hostErrorHandler(err: Error) {
   </v-menu>
 </template>
 
+../../utils/symbols/keys
