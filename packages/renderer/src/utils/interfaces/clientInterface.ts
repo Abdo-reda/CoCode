@@ -1,5 +1,5 @@
 import { type Ref } from 'vue';
-import { type supportedLanguages } from '/@/utils/enums/supportedLanguagesEnum';
+import { type SupportedLanguages } from '@shared/utils/enums/supportedLanguagesEnum';
 
 export interface IClient {
     uuid: string;
@@ -11,6 +11,6 @@ export interface IClient {
     setInfo(clientName: string): void;
     joinRoom(roomId: string): Promise<void>;
     sendCode(channelData: string): void;
-    executeCode(lang: supportedLanguages): void;
+    executeCode(lang: SupportedLanguages): void;
     destroy(): void;
 }

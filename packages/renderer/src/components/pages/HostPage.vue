@@ -1,18 +1,19 @@
 
 <script lang="ts" setup>
-import { reactive } from 'vue';
-import electronService from '/@/services/electronService';
+import { reactive, inject } from 'vue';
 import ClientCard from '/@/components/shared/ClientCard.vue';
 import { GetHost } from '/@/services/hostService';
 import {v4 as uuidv4} from 'uuid';
+import { ElectronServiceKey } from '/@/utils/symbols/keys';
 
+const electronService = inject(ElectronServiceKey)!;
 const hostPeer = GetHost(); //in theory, this can't be null
 const roomId = hostPeer?.roomId ?? 'no room id';
 
 //I will have a map, key is client uuid, and value is client object containing client name & content. That's all what I need.
   //This map, will be in the Ihost, he will keep track of the clients connected non? when a client is disconnected, he removes it from the object, yest.
 
-//----------- Refactor this logic and see where it should be ... complexity demon enters the chat :) 
+//----------- Refactor this logic and see where it should be ... complexity demon enters the chat :)
 // electronService.onClientJoined((_, client) => {
 //   console.log('on client joined from host', client.name);
 //   clients.push(client);
@@ -32,7 +33,7 @@ let counter = 0;
 function tempAddClient() {
   hostPeer?.clientList.value.set(`client_temp_${counter}`, {
     name: `client_temp_${counter++}`,
-    uuid: '', 
+    uuid: '',
   });
 }
 
@@ -48,7 +49,6 @@ function copyToClipboard() {
 </script>
 
 <template>
-  <!-- <p> -------------- host page -------------- </p> -->
   <div class="w-100 ma-4">
     <v-row
       no-gutters
@@ -86,6 +86,7 @@ function copyToClipboard() {
 </template>
 
 <style>
+/* TODO: improve the styling... */
 
 .clients-container {
   max-height: calc(100vh - 8em);
@@ -102,4 +103,3 @@ function copyToClipboard() {
   text-transform: unset !important;
 }
 </style>
-

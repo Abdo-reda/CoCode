@@ -7,13 +7,20 @@
     "skipLibCheck": true,
     "strict": true,
     "isolatedModules": true,
-    "types": ["node"],
+    "jsx": "preserve",
+    "types": ["node", "diff-match-patch"],
     "baseUrl": ".",
+    "allowJs": true,
     "paths": {
-      "/@/*": ["./src/*"],
-      "/@shared/*": ["../shared/src/*"],
-    }
+    },
+    "lib": ["ESNext", "dom", "dom.iterable"]
   },
-  "include": ["src/**/*.ts", "../../types/**/*.d.ts"],
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "types/**/*.d.ts",
+    "../../types/**/*.d.ts",
+    "../../node_modules/**/*.d.ts",
+  ],
   "exclude": ["**/*.spec.ts", "**/*.test.ts"]
 }

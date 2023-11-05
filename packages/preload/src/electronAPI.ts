@@ -1,37 +1,31 @@
-import {type IpcRendererEvent, ipcRenderer, clipboard} from 'electron';
+import {ipcRenderer, clipboard} from 'electron';
 import { address } from 'ip';
+import type { ElectronCallbackFunc, IElectronAPI } from '/@shared/utils/interfaces/electronAPIInterface';
 
-
-//find another way to disable eslint for any, too lazy to do this now.
-// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any
-export type ElectronCallbackFunc = (event: IpcRendererEvent, ...args: any[]) => void;
-
-export default class ElectronAPI {
-  public isDesktop = true;
-  
-  constructor() {}
-
-  public openNewWindow() {
+const ElectronAPI: IElectronAPI = {
+  isDesktop: true,
+  hello() {
+      console.log('0-0');
+  },
+  openNewWindow() {
     ipcRenderer.send('open-new-window');
-  }
-
-  public hostServer() {
+  },
+  hostServer() {
     ipcRenderer.send('host-server');
-  }
-
-  public onClientJoined(callback: ElectronCallbackFunc) {
+  },
+  onClientJoined(callback: ElectronCallbackFunc) {
     ipcRenderer.on('on-client-joined', callback);
-  }
-
-  public onClientType(callback: ElectronCallbackFunc) {
+  },
+  onClientType(callback: ElectronCallbackFunc) {
     ipcRenderer.on('on-client-type', callback);
-  }
-
-  public getAddress() {
+  },
+  getAddress(): string {
     return address();
-  }
-
-  public copyToClipboard(text: string) {
+  },
+  copyToClipboard(text: string) {
     clipboard.writeText(text);
-  }
-}
+  },
+};
+
+export default ElectronAPI;
+

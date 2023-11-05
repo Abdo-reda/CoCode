@@ -1,5 +1,5 @@
-import { HostPeerRTC } from '/@/services/WebRTC/webRTCHostPeer';
-import { HostPeerWS } from './webSocketService';
+import { HostPeerRTC } from './WebRTC/webRTCHost';
+import { HostPeerWS } from './WebSockets/webSocketService';
 import { type IHost } from '/@/utils/interfaces/hostInterface'
 
 let hostRTCInstance: HostPeerRTC | null = null;

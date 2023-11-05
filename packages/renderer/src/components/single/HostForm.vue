@@ -1,10 +1,11 @@
 <script lang="ts" setup>
-import electronService from '/@/services/electronService';
-import { ToastEvent } from '/@/utils/symbols/keys';
+import { ToastEventKey } from '/@/utils/symbols/keys';
 import { useRouter } from 'vue-router';
 import { ref, inject } from 'vue';
 // import { hostServer } from '/@/services/webSocketService';
 import { GetHostWebSockets, GetHostWebRTC } from '/@/services/hostService';
+import { ElectronServiceKey } from '/@/utils/symbols/keys';
+
 
 /* TODO:
   - Does the host have a freaking name? should there be a form for that....
@@ -12,12 +13,14 @@ import { GetHostWebSockets, GetHostWebRTC } from '/@/services/hostService';
   - Implement local hosting ... use microsockets :) <3
 */
 
+
+const electronService = inject(ElectronServiceKey)!;
 const router = useRouter();
 const isLocalHosting = ref(false);
 const isOnlineHosting = ref(false);
 
 // eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any
-const toastEvent: any = inject(ToastEvent);
+const toastEvent: any = inject(ToastEventKey);
 //I will make it typesafe later .. https://logaretm.com/blog/type-safe-provide-inject/
 //https://vuejs.org/guide/typescript/composition-api.html#typing-provide-inject
 
@@ -126,5 +129,3 @@ function hostErrorHandler(err: Error) {
     </v-card>
   </v-menu>
 </template>
-
-../../utils/symbols/keys

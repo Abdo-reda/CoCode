@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import CodeEditor from 'simple-code-editor/CodeEditor.vue';
-import {supportedLanguagesMap, supportedLanguages} from '/@/utils/enums/supportedLanguagesEnum';
+import { SupportedLanguagesMap, SupportedLanguages} from '/@shared/utils/enums/supportedLanguagesEnum';
 import { ref, onMounted } from 'vue';
 
 
@@ -23,11 +23,11 @@ const props = defineProps({
 //TODO: appearently I don't need this? make this better //of course I need this, what the fuck am I on about?
 const emits = defineEmits<{
   'update:content': [content: string]
-  'execute': [lang: supportedLanguages]
+  'execute': [lang: SupportedLanguages]
 }>();
 
 const orgEditorRef = ref<InstanceType<typeof CodeEditor> | null>(null);
-const curLanguage = ref<supportedLanguages>(supportedLanguages.JAVASCRIPT);
+const curLanguage = ref<SupportedLanguages>(SupportedLanguages.JAVASCRIPT);
 
 //TODO: this is really awful, why would I do this, I could have easily forked the package and changed it to include name. I still want to include an execute button.
 onMounted(() => {
@@ -38,7 +38,7 @@ onMounted(() => {
   headerElement.appendChild(paragraph);
 });
 
-function onLanguageChange(selectedLanguage: supportedLanguages): void {
+function onLanguageChange(selectedLanguage: SupportedLanguages): void {
   console.log('---- language', selectedLanguage);
   curLanguage.value = selectedLanguage;
 }
@@ -60,7 +60,7 @@ function executeCode(): void {
       theme="stackoverflow-dark"
       font-size="14px"
       :read-only="false"
-      :languages="Array.from(supportedLanguagesMap.entries())"
+      :languages="Array.from(SupportedLanguagesMap.entries())"
       @input="$emit('update:content', ($event.target as HTMLInputElement).value)"
       @lang="onLanguageChange"
     >

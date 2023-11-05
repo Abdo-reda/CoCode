@@ -1,13 +1,15 @@
 import type {Socket} from 'socket.io-client';
 import IO from 'socket.io-client';
-import {ref, reactive} from 'vue';
-import electronService from './electronService';
+import {ref, reactive, inject} from 'vue';
 import type {IClient} from '/@/utils/interfaces/clientInterface';
 // import {newClient} from './clientService';
 import { v4 as uuidv4 } from 'uuid';
-import { IHost } from '/@/utils/interfaces/hostInterface';
+import { type IHost } from '/@/utils/interfaces/hostInterface';
+import { ElectronServiceKey } from '/@/utils/symbols/keys';
 
 
+
+const electronService = inject(ElectronServiceKey)!;
 const lowerAlphabet = Array.from({length: 26}, (_, i) => String.fromCharCode(97 + i));
 const upperAlphabet = Array.from({length: 26}, (_, i) => String.fromCharCode(65 + i));
 const numbers = Array.from({length: 10}, (_, i) => i.toString());

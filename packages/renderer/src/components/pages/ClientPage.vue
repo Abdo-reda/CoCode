@@ -5,7 +5,7 @@ import { ref, watch } from 'vue';
 // import {getClientSocket, clientRef} from '/@/services/webSocketService';
 import { diff_match_patch } from 'diff-match-patch';
 import { GetClient } from '/@/services/clientService';
-import { supportedLanguages } from '/@/utils/enums/supportedLanguagesEnum';
+import { type SupportedLanguages } from '/@shared/utils/enums/supportedLanguagesEnum';
 
 /*
 TODO:
@@ -66,7 +66,7 @@ watch(content, async (newContent, oldContent) => {
 
 }, { immediate: true });
 
-function executeClientCode(lang: supportedLanguages):void {
+function executeClientCode(lang: SupportedLanguages):void {
   ClientPeer?.executeCode(lang);
 }
 

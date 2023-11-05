@@ -1,18 +1,19 @@
 <script lang="ts" setup>
-import { provide, ref, onBeforeUnmount } from 'vue';
-import electronService from '/@/services/electronService';
+import { provide, ref, onBeforeUnmount, inject } from 'vue';
 import ToastNotification from '/@/components/shared/ToastNotification.vue';
-import { ToastEvent } from '/@/utils/symbols/keys';
+import { ElectronServiceKey, ToastEventKey } from '/@/utils/symbols/keys';
 import type { ThemeInstance} from 'vuetify';
 import { useTheme } from 'vuetify';
 import { DestroyHost } from '/@/services/hostService';
 
+const electronService = inject(ElectronServiceKey)!;
 const theme: ThemeInstance = useTheme();
 const APP_VERSION = import.meta.env.VITE_APP_VERSION;
 const toastShow = ref(false);
 const toastText = ref('');
 const toastColor = ref('info');
 
+//TODO: Make this a plugin ... non?
 function showToast(text: string, color: string): void {
   toastShow.value = true;
   toastText.value = text;
@@ -24,7 +25,7 @@ function toggleTheme() {
 }
 
 //shouldn't be a plugin and a global object?
-provide(ToastEvent, {
+provide(ToastEventKey, {
   showToast,
 });
 
@@ -137,4 +138,4 @@ nav {
   border: 1px solid #373737 !important;
   height: 2em;
 }
-</style>./utils/symbols/keys
+</style>

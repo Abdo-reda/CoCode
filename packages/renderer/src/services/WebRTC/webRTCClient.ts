@@ -3,7 +3,7 @@ import { PeerRTC, RTCConfig, dmpInstance } from "/@/services/WebRTC/webRTCServic
 import type { IClient } from "/@/utils/interfaces/clientInterface";
 import { addDoc, collection, deleteDoc, doc, getDocs, onSnapshot, query, updateDoc, where } from "firebase/firestore";
 import { firestore } from "/@/services/firebaseService";
-import { type supportedLanguages } from "/@/utils/enums/supportedLanguagesEnum";
+import { type SupportedLanguages } from "@shared/utils/enums/supportedLanguagesEnum";
 import {v4 as uuidv4} from 'uuid';
 
 export class ClientPeerRTC extends PeerRTC implements IClient {
@@ -142,9 +142,9 @@ export class ClientPeerRTC extends PeerRTC implements IClient {
 
   /**
    * Sends execution command to the host using executeChannel.
-   * @param text supportedLanguages
+   * @param text SupportedLanguages
    */
-  public executeCode(executionData: supportedLanguages): void {
+  public executeCode(executionData: SupportedLanguages): void {
     console.log('--- sending data:', executionData);
     if (this.executeChannel && this.executeChannel.readyState === 'open')
       this.executeChannel.send(executionData);

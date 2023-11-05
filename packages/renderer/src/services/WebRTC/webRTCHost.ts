@@ -3,7 +3,7 @@ import { PeerRTC, RTCConfig, dmpInstance } from "/@/services/WebRTC/webRTCServic
 import type { IHost, IClientInfo } from "/@/utils/interfaces/hostInterface";
 import { addDoc, collection, deleteDoc, doc, onSnapshot } from "firebase/firestore";
 import { firestore } from "/@/services/firebaseService";
-import { type supportedLanguages } from "/@/utils/enums/supportedLanguagesEnum";
+import { type SupportedLanguages } from "@shared/utils/enums/supportedLanguagesEnum";
 
 export class HostPeerRTC extends PeerRTC implements IHost {
   //I will organize this later, but every host has
@@ -137,7 +137,7 @@ export class HostPeerRTC extends PeerRTC implements IHost {
   }
 
   private listenToExecuteChannel(clientUUID: string): void {
-    this.curExecuteChannel!.onmessage = (event: MessageEvent<supportedLanguages>) => {
+    this.curExecuteChannel!.onmessage = (event: MessageEvent<SupportedLanguages>) => {
       console.log('---- receiving execution message data:', event.data);
       console.log(event);
       const language = event.data;

@@ -1,8 +1,8 @@
 import { v4 as uuidv4 } from 'uuid';
 import { reactive } from 'vue';
-import { ClientPeerRTC } from '/@/services/WebRTC/webRTCClientPeer';
-import { ClientPeerWS } from './webSocketService';
-import { type IClient } from '/@/utils/interfaces/clientInterface'
+import { ClientPeerRTC } from './WebRTC/webRTCClient';
+import { ClientPeerWS } from './WebSockets/webSocketService';
+import { type IClient } from '/@/utils/interfaces/clientInterface';
 
 let clientWebRTC: ClientPeerRTC | null = null;
 let clientWebSockets: ClientPeerRTC | null = null; //TODO: change to ClientPeerWS

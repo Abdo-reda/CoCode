@@ -8,6 +8,9 @@
     "strict": true,
     "isolatedModules": true,
     "types": ["node"],
+    "paths": {
+      "/@shared/*": ["../shared/src/*"],
+    },
     "baseUrl": ".",
   },
   "include": ["src/**/*.ts", "../../types/**/*.d.ts"],
