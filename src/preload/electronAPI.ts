@@ -1,5 +1,6 @@
 import {type IpcRendererEvent, ipcRenderer, clipboard} from 'electron';
 import { address } from 'ip';
+import { IPC_EVENTS } from '@common/ipcEvents';
 
 
 //find another way to disable eslint for any, too lazy to do this now.
@@ -10,8 +11,6 @@ export type ElectronCallbackFunc = (event: IpcRendererEvent, ...args: any[]) => 
 export default class ElectronAPI {
   public isDesktop = true;
   
-  constructor() {}
-
   public openNewWindow() {
     ipcRenderer.send('open-new-window');
   }
@@ -20,12 +19,12 @@ export default class ElectronAPI {
     ipcRenderer.send('host-server');
   }
 
-  public onClientJoined(callback: ElectronCallbackFunc) {
-    ipcRenderer.on('on-client-joined', callback);
+  public onClientJoined(listener: (event: IpcRendererEvent, text: string) => void) {
+    ipcRenderer.on('on-client-joined', listener);
   }
 
-  public onClientType(callback: ElectronCallbackFunc) {
-    ipcRenderer.on('on-client-type', callback);
+  public onClientType(listener: (event: IpcRendererEvent, text: string) => void) {
+    ipcRenderer.on(IPC_EVENTS.ON_CLIENT_TYPE, listener);
   }
 
   public getAddress() {

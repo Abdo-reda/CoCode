@@ -15,8 +15,8 @@ type Permission = Parameters<
  * In development mode you need allow open `VITE_DEV_SERVER_URL`.
  */
 const ALLOWED_ORIGINS_AND_PERMISSIONS = new Map<string, Set<Permission>>(
-  import.meta.env.DEV && import.meta.env.VITE_DEV_SERVER_URL
-    ? [[new URL(import.meta.env.VITE_DEV_SERVER_URL).origin, new Set()]]
+  import.meta.env.DEV && process.env['ELECTRON_RENDERER_URL']
+    ? [[new URL(process.env['ELECTRON_RENDERER_URL']).origin, new Set()]]
     : [],
 );
 

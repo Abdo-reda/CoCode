@@ -20,7 +20,7 @@ const props = defineProps({
 
 
 //use v-model instead? I mean, I don't need two way binding, but it's more clean
-watch(() => props.show, (newValue, _) => {
+watch(() => props.show, (newValue) => {
     isShowing.value = newValue;
 });
 

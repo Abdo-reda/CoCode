@@ -39,8 +39,8 @@ async function createWindow() {
     }
   });
 
-  if (import.meta.env.DEV && import.meta.env.VITE_DEV_SERVER_URL !== undefined) {
-    await browserWindow.loadURL(import.meta.env.VITE_DEV_SERVER_URL);
+  if (import.meta.env.DEV && process.env['ELECTRON_RENDERER_URL'] !== undefined) {
+    await browserWindow.loadURL(process.env['ELECTRON_RENDERER_URL']);
   } else {
     await browserWindow.loadFile(resolve(__dirname, '../../renderer/dist/index.html'));
   }

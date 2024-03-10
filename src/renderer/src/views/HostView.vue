@@ -1,9 +1,10 @@
 
 <script lang="ts" setup>
-import electronService from '@renderer/core/services/electronService';
 import ClientCard from '@renderer/components/ClientCard.vue';
+import useElectron from '@renderer/core/composables/useElectron';
 import { GetHost } from '@renderer/core/services/hostService';
 
+const electronService = useElectron();
 const hostPeer = GetHost(); //in theory, this can't be null
 const roomId = hostPeer?.roomId ?? 'no room id';
 

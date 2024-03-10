@@ -1,13 +1,15 @@
 import type {Socket} from 'socket.io-client';
 import IO from 'socket.io-client';
 import {ref, reactive} from 'vue';
-import electronService from './electronService';
 import type {IClient} from '@renderer/core/interfaces/clientInterface';
 // import {newClient} from './clientService';
 // import { v4 as uuidv4 } from 'uuid';
 import { IHost } from '@renderer/core/interfaces/hostInterface';
+import useElectron from '../composables/useElectron';
 
+//TODO: this fucking file is a mess, should seperate into seperate classes, composables and so on ...
 
+const electronService = useElectron();
 const lowerAlphabet = Array.from({length: 26}, (_, i) => String.fromCharCode(97 + i));
 const upperAlphabet = Array.from({length: 26}, (_, i) => String.fromCharCode(65 + i));
 const numbers = Array.from({length: 10}, (_, i) => i.toString());

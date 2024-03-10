@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { ref, watch, inject } from 'vue';
 import { useRouter } from 'vue-router';
-import { ToastEvent } from '@renderer/core/symbols/events';
 import { GetClient, GetClientWebRTC, GetClientWebSockets } from '@renderer/core/services/clientService';
 import { IClient } from '@renderer/core/interfaces/clientInterface';
 
@@ -9,7 +8,6 @@ import { IClient } from '@renderer/core/interfaces/clientInterface';
 // hint="localhost is b#aaab"
 
 // eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any
-const toastEvent: any = inject(ToastEvent); //I will make it typesafe later .. https://logaretm.com/blog/type-safe-provide-inject/
 const router = useRouter();
 const isLoading = ref(false);
 const isValidated = ref(false);
@@ -120,4 +118,3 @@ function setupClient(): void {
     </div>
   </v-card>
 </template>
-

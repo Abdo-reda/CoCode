@@ -5,9 +5,19 @@ import vuetify from 'vite-plugin-vuetify';
 
 export default defineConfig({
   main: {
+    resolve: {
+      alias: {
+        '@common': resolve('src/common')
+      }
+    },
     plugins: [externalizeDepsPlugin()]
   },
   preload: {
+    resolve: {
+      alias: {
+        '@common': resolve('src/common')
+      }
+    },
     plugins: [externalizeDepsPlugin()]
   },
   renderer: {

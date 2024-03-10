@@ -16,7 +16,6 @@ module.exports = {
     'ecmaVersion': 12,
     'sourceType': 'module',
   },
-  plugins: ['@typescript-eslint'],
   ignorePatterns: ['node_modules/**', '**/dist/**'],
   rules: {
     '@typescript-eslint/no-unused-vars': [

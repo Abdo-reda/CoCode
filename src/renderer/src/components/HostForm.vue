@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import electronService from '@renderer/core/services/electronService';
-import { ToastEvent } from '@renderer/core/symbols/events';
 import { useRouter } from 'vue-router';
-import { ref, inject } from 'vue';
+import { ref } from 'vue';
 // import { hostServer } from '@renderer/services/webSocketService';
 import { GetHostWebSockets, GetHostWebRTC } from '@renderer/core/services/hostService';
+import useToast from '@renderer/core/composables/useToast';
+import useElectron from '@renderer/core/composables/useElectron';
 
 /* TODO:
   - Does the host have a freaking name? should there be a form for that.... 
@@ -12,12 +12,13 @@ import { GetHostWebSockets, GetHostWebRTC } from '@renderer/core/services/hostSe
   - Implement local hosting ... use microsockets :) <3
 */
 
+const electronService = useElectron();
+const { showToast } = useToast();
 const router = useRouter();
 const isLocalHosting = ref(false);
 const isOnlineHosting = ref(false);
 
-// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any
-const toastEvent: any = inject(ToastEvent);
+
 //I will make it typesafe later .. https://logaretm.com/blog/type-safe-provide-inject/
 //https://vuejs.org/guide/typescript/composition-api.html#typing-provide-inject
 
@@ -27,7 +28,7 @@ const toastEvent: any = inject(ToastEvent);
  */
 function hostLocal() {
   isLocalHosting.value = true;
-  toastEvent.showToast('Hosting Local Server...', 'info');
+  showToast('Hosting Local Server...', 'info');
   // const hostPeer = GetHostWebSockets();
   // hostPeer.hostRoom().then((_) => hostSuccessHandler()).catch( (err) => hostErrorHandler(err));
 }
@@ -38,7 +39,7 @@ function hostLocal() {
  */
 function hostOnline() {
   isOnlineHosting.value = true;
-  toastEvent.showToast('Hosting Online Server...', 'info');
+  showToast('Hosting Online Server...', 'info');
   const hostPeer = GetHostWebRTC();
   hostPeer.hostRoom().then((_) => hostSuccessHandler()).catch( (err) => hostErrorHandler(err));
 }
@@ -46,14 +47,14 @@ function hostOnline() {
 
 function hostSuccessHandler() {
   isLocalHosting.value = isOnlineHosting.value = false;
-  toastEvent.showToast('Hosted Online Server Successfully!', 'success');
+  showToast('Hosted Online Server Successfully!', 'success');
   router.push({ path: 'host' });
 }
 
 
 function hostErrorHandler(err: Error) {
   isLocalHosting.value = isOnlineHosting.value = false;
-  toastEvent.showToast('Failed to Host Online Server!', 'error');
+  showToast('Failed to Host Online Server!', 'error');
   console.log(err);
 }
 
@@ -62,8 +63,8 @@ function hostErrorHandler(err: Error) {
 
 <template>
   <!-- @click="host()" -->
-  <v-btn v-if="electronService.isDesktop" id="host-menu-activator" color="primary" class="text-background my-4"
-    prepend-icon="server-plus">
+  <v-btn v-if="electronService.isDesktop()" id="host-menu-activator" color="primary" class="text-background my-4"
+    prepend-icon="mdi-server-plus">
     Host
   </v-btn>
 
@@ -104,8 +105,8 @@ function hostErrorHandler(err: Error) {
     </v-card>
   </v-menu> -->
 
-  <v-btn v-if="!electronService.isDesktop" id="desktop-menu-activator" variant="tonal" class="text-primary-darken-1 my-4"
-    prepend-icon="router">
+  <v-btn v-if="!electronService.isDesktop()" id="desktop-menu-activator" variant="tonal" class="text-primary-darken-1 my-4"
+    prepend-icon="mdi-server-plus">
     Host
   </v-btn>
 
@@ -126,4 +127,3 @@ function hostErrorHandler(err: Error) {
     </v-card>
   </v-menu>
 </template>
-

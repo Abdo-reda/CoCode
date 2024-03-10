@@ -1,31 +1,21 @@
 <script lang="ts" setup>
-import { provide, ref, onBeforeUnmount } from 'vue';
-import electronService from '@renderer/core/services/electronService';
+import { onBeforeUnmount } from 'vue';
 import ToastNotification from '@renderer/components/ToastNotification.vue';
-import { ToastEvent } from '@renderer/core/symbols/events';
-import { ThemeInstance, useTheme } from 'vuetify';
+// import { ThemeInstance, useTheme } from 'vuetify';
 import { DestroyHost } from '@renderer/core/services/hostService';
+import useToast from './core/composables/useToast';
+import useElectron from './core/composables/useElectron';
 
-const theme: ThemeInstance = useTheme();
+// const theme = useTheme();
+const electronService = useElectron();
 // const APP_VERSION = import.meta.env.VITE_APP_VERSION;
-const toastShow = ref(false);
-const toastText = ref('');
-const toastColor = ref('info');
 
-function showToast(text: string, color: string) {
-  toastShow.value = true;
-  toastText.value = text;
-  toastColor.value = color;
-}
+//TODO: this should be turned into a composable.
+const { getToastShow, getToastColor, getToastText } = useToast();
 
-function toggleTheme() {
-  theme.global.name.value = theme.global.current.value.dark ? 'light' : 'dark'
-}
-
-//shouldn't be a plugin and a global object?
-provide(ToastEvent, {
-  showToast,
-});
+// function toggleTheme() {
+//   theme.global.name.value = theme.global.current.value.dark ? 'light' : 'dark'
+// }
 
 onBeforeUnmount(() => {
   DestroyHost();
@@ -76,8 +66,7 @@ onBeforeUnmount(() => {
       </div>
     </v-main>
 
-    <toast-notification :show="toastShow" :color="toastColor" :text="toastText">
-    </toast-notification>
+    <ToastNotification :show="getToastShow()" :color="getToastColor()" :text="getToastText()" />
 
     <v-footer class="app-footer flex-0-0 pa-0" :app="true">
       <p class="text-overline font-italic text-disabled pa-1">

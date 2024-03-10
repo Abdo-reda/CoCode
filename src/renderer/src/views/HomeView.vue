@@ -1,31 +1,14 @@
 <script lang="ts" setup>
 import ClientForm from '@renderer/components/ClientForm.vue';
 import HostForm from '@renderer/components/HostForm.vue';
+import { GeneralUtility } from '@renderer/core/utils/GeneralUtils';
 import { ref } from 'vue';
 
 //TODO: add two methods, lan connection that uses webosckets and other connection that uses webRTC
   //TODO: also add different view for host and client depending on which connection mode is made
 //Also, fix the organization and transitions ... why is there a host-form and client-form and can we fix this
 
-
 const clientPopup = ref(false);
-
-function isMobile(): boolean {
-  const toMatch = [
-    /Android/i,
-    /webOS/i,
-    /iPhone/i,
-    /iPad/i,
-    /iPod/i,
-    /BlackBerry/i,
-    /Windows Phone/i,
-  ];
-
-  return toMatch.some((toMatchItem) => {
-    return navigator.userAgent.match(toMatchItem);
-  });
-}
-
 
 </script>
 
@@ -53,17 +36,18 @@ function isMobile(): boolean {
     <!-- Options -->
     <div class="d-flex justify-center ">
       <!-- Host Option -->
+      <!-- TODO: WTF is the point of isMobile anyway? -->
       <div
-        v-if="!isMobile()"
+        v-if="!GeneralUtility.isMobile()"
         class="button-popup host-option d-flex flex-column align-center mx-8"
       >
-        <HostForm/> 
+        <HostForm /> 
       </div>
       <!-- Client Option -->
       <div class="button-popup d-flex flex-column align-center mx-8">
         <v-btn
           color="secondary"
-          prepend-icon="devices"
+          prepend-icon="mdi-lan-connect"
           class="my-4"
           @click="clientPopup = !clientPopup;"
         >
@@ -74,7 +58,7 @@ function isMobile(): boolean {
             v-if="clientPopup"
             class="button-popup"
           >
-            <client-form> </client-form>
+            <ClientForm />
           </div>
         </v-fade-transition>
       </div>
