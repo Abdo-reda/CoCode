@@ -4,12 +4,12 @@ require('@rushstack/eslint-patch/modern-module-resolution');
 
 module.exports = {
   extends: [
-    'eslint:recommended',
-    'plugin:vue/vue3-recommended',
+    'eslint:essential',
+    'plugin:vue/vue3-essential',
     '@electron-toolkit',
-    '@electron-toolkit/eslint-config-ts/eslint-recommended',
-    '@vue/eslint-config-typescript/recommended',
-    '@vue/eslint-config-prettier',
+    '@electron-toolkit/eslint-config-ts/eslint-essential',
+    '@vue/eslint-config-typescript/essential',
+    '@vue/eslint-config-prettier'
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
