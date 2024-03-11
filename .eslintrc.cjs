@@ -13,7 +13,7 @@ module.exports = {
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
-    'ecmaVersion': 12,
+    'ecmaVersion': 'latest',
     'sourceType': 'module',
   },
   ignorePatterns: ['node_modules/**', '**/dist/**'],
