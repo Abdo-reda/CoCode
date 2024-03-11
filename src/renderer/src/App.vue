@@ -20,7 +20,6 @@ const { getToastShow, getToastColor, getToastText } = useToast();
 onBeforeUnmount(() => {
   DestroyHost();
 });
-
 </script>
 
 <template>
@@ -43,7 +42,7 @@ onBeforeUnmount(() => {
             Turn on the progress:
             <v-progress-circular :indeterminate="darkTheme" size="24" class="ms-2"></v-progress-circular>
           </template>
-        </v-switch> -->
+</v-switch> -->
       </div>
 
     </v-app-bar>
