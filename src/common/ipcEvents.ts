@@ -1,3 +1,3 @@
-export enum IPC_EVENTS {
+export enum IpcEvents {
     ON_CLIENT_TYPE = 'on-client-type',
 }

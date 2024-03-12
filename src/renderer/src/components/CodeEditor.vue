@@ -1,25 +1,16 @@
 <script setup lang="ts">
 import { ref, shallowRef } from 'vue';
-import { Codemirror } from 'vue-codemirror'
-import { javascript } from '@codemirror/lang-javascript'
+import { Codemirror } from 'vue-codemirror';
+import { javascript } from '@codemirror/lang-javascript';
 // import { python } from '@codemirror/lang-python'
 import { indentationMarkers } from '@replit/codemirror-indentation-markers';
-// import { oneDark } from '@codemirror/theme-one-dark'
-// import { materialLight } from '@ddietr/codemirror-themes/material-light'
-// import { materialDark } from '@ddietr/codemirror-themes/material-dark'
-// import { solarizedLight } from '@ddietr/codemirror-themes/solarized-light'
-// import { solarizedDark } from '@ddietr/codemirror-themes/solarized-dark'
-// import { dracula } from '@ddietr/codemirror-themes/dracula'
-// import { githubLight } from '@ddietr/codemirror-themes/github-light'
-// import { githubDark } from '@ddietr/codemirror-themes/github-dark'
-// import { aura } from '@ddietr/codemirror-themes/aura'
-// import { tokyoNight } from '@ddietr/codemirror-themes/tokyo-night'
-// import { tokyoNightStorm } from '@ddietr/codemirror-themes/tokyo-night-storm'
-// import { tokyoNightDay } from '@ddietr/codemirror-themes/tokyo-night-day'
-import { vscodeDark } from '@renderer/style/themes/vsCodeTheme';
+import { vscodeDark } from '@renderer/styles/themes/vsCodeTheme';
+import { EditorView } from 'codemirror';
+import { type EditorState } from '@codemirror/state';
+import EditorToolbar from './EditorToolbar.vue';
 
 const disable = ref(false);
-const code = ref(`console.log('Hello, world!')`)
+const code = ref(`console.log('Hello, world!')`);
 const extensions = [
     //---- languages
     // python(),
@@ -27,13 +18,19 @@ const extensions = [
     //---- themes
     vscodeDark,
     //---- others
+    EditorView.lineWrapping,
     indentationMarkers(),
-]
+];
 
 // Codemirror EditorView instance ref
-const view = shallowRef()
-const handleReady = (payload) => {
-    view.value = payload.view
+const view = shallowRef<EditorView>();
+
+function handleReady(payload: {
+    view: EditorView;
+    state: EditorState;
+    container: HTMLDivElement;
+}): void {
+    view.value = payload.view;
 }
 
 // Status is available at all times via Codemirror EditorView
@@ -51,11 +48,29 @@ const handleReady = (payload) => {
 //     // return ...
 // }
 
+
 </script>
 
 <template>
-    <Codemirror v-model="code" placeholder="Code goes here..." :disabled="disable" :style="{ height: '400px' }"
-        :autofocus="true" :indent-with-tab="true" :tab-size="2" :extensions="extensions" @ready="handleReady"
-        @change="console.log('change', $event)" @focus="console.log('focus', $event)"
-        @blur="console.log('blur', $event)" />
-</template>@renderer/style/themes/vsCodeTheme
+    <div class="d-block pa-4 w-100">   
+        <EditorToolbar
+            @action="console.log('action', $event)"
+            @change-language="console.log('changeLanguage', $event)"
+            @change-theme="console.log('changeTheme', $event)"
+            color="primary" 
+            client-name="Alice" />   
+        <Codemirror 
+            v-model="code" 
+            placeholder="Code goes here..." 
+            :autofocus="true" 
+            :indent-with-tab="true" 
+            :tab-size="2" 
+            :disabled="disable"
+            :extensions="extensions" 
+            @ready="handleReady"
+            @change="console.log('change', $event)" 
+            @focus="console.log('focus', $event)"
+            @blur="console.log('blur', $event)" 
+        /> 
+    </div>
+</template>

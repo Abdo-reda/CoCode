@@ -1,6 +1,6 @@
 import {type IpcRendererEvent, ipcRenderer, clipboard} from 'electron';
 import { address } from 'ip';
-import { IPC_EVENTS } from '@common/ipcEvents';
+import { IpcEvents } from '@common/ipcEvents';
 
 
 //find another way to disable eslint for any, too lazy to do this now.
@@ -24,7 +24,7 @@ export default class ElectronAPI {
   }
 
   public onClientType(listener: (event: IpcRendererEvent, text: string) => void) {
-    ipcRenderer.on(IPC_EVENTS.ON_CLIENT_TYPE, listener);
+    ipcRenderer.on(IpcEvents.ON_CLIENT_TYPE, listener);
   }
 
   public getAddress() {

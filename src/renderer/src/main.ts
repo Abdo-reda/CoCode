@@ -4,9 +4,7 @@ import vuetify from '@renderer/plugins/vuetify';
 import electron from '@renderer/plugins/electron';
 import {createRouter, createWebHistory} from 'vue-router';
 import routes from '@renderer/plugins/routes';
-import '@renderer/style/app.css';
-import 'vuetify/styles';
-
+import '@renderer/styles/main.scss';
 
 const vueRouter = createRouter({
   history: createWebHistory(),
