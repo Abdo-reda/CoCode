@@ -1,7 +1,15 @@
 export enum EditorThemes {
     VS_CODE = 'vs-code',
+    ONE_DARK = 'one-dark',
     DRACULA = 'dracula',
+    MATERIAL_LIGHT = 'material-light',
+    MATERIAL_DARK = 'material-dark',
     SOLARIZED_DARK = 'solarized-dark',
     SOLARIZED_LIGHT = 'solarized-light',
-    GITHUB = 'github',
+    GITHUB_LIGHT = 'github-light',
+    GITHUB_DARK = 'github-dark',
+    AURA = 'aura',
+    TOKYO_NIGHT = 'tokyo-night',
+    TOKYO_NIGHT_STORM = 'tokyo-night-storm',
+    TOKYO_NIGHT_DAY = 'tokyo-night-day',
 }

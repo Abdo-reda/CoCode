@@ -1,28 +1,31 @@
 <script setup lang="ts">
-import { ref, shallowRef } from 'vue';
+import { computed, ref, shallowRef } from 'vue';
 import { Codemirror } from 'vue-codemirror';
-import { javascript } from '@codemirror/lang-javascript';
-// import { python } from '@codemirror/lang-python'
 import { indentationMarkers } from '@replit/codemirror-indentation-markers';
-import { vscodeDark } from '@renderer/styles/themes/vsCodeTheme';
 import { EditorView } from 'codemirror';
 import { type EditorState } from '@codemirror/state';
 import EditorToolbar from './EditorToolbar.vue';
+import { redo, undo } from '@codemirror/commands';
+import { EditorActions } from '@renderer/core/enums/editorActionsEnum';
+import { EditorThemes } from '@renderer/core/enums/editorThemesEnum';
+import { EditorLanguages } from '@renderer/core/enums/editorLanguagesEnum';
+import { languagesMap } from '@renderer/core/utils/editor/languageMap';
+import { themesMap } from '@renderer/core/utils/editor/themeMap';
 
 const disable = ref(false);
 const code = ref(`console.log('Hello, world!')`);
-const extensions = [
-    //---- languages
-    // python(),
-    javascript(),
-    //---- themes
-    vscodeDark,
-    //---- others
-    EditorView.lineWrapping,
-    indentationMarkers(),
-];
+const editorLanguage = ref(EditorLanguages.JAVASCRIPT);
+const editorTheme = ref(EditorThemes.VS_CODE);
 
-// Codemirror EditorView instance ref
+const extensions = computed( () => {
+    return [
+        languagesMap.get(editorLanguage.value)!,
+        themesMap.get(editorTheme.value)!,
+        EditorView.lineWrapping,
+        indentationMarkers(),
+    ];
+});
+
 const view = shallowRef<EditorView>();
 
 function handleReady(payload: {
@@ -49,19 +52,52 @@ function handleReady(payload: {
 // }
 
 
+
+function handleChangeTheme(theme: EditorThemes): void {
+    editorTheme.value = theme;
+}
+
+function handleChangeLanguage(lang: EditorLanguages): void {
+    editorLanguage.value = lang;
+}
+
+function handleAction(action: EditorActions): void {
+    switch (action) {
+        case EditorActions.COPY:
+            navigator.clipboard.writeText(code.value);
+            break;
+        case EditorActions.UNDO:
+            undo({
+                dispatch: view.value!.dispatch,
+                state: view.value!.state,
+            });
+            break;
+        case EditorActions.REDO:
+            redo({
+                dispatch: view.value!.dispatch,
+                state: view.value!.state,
+            });
+            break;
+        default:
+            break;
+    }
+}
+
+
 </script>
 
 <template>
     <div class="d-block pa-4 w-100">   
         <EditorToolbar
-            @action="console.log('action', $event)"
-            @change-language="console.log('changeLanguage', $event)"
-            @change-theme="console.log('changeTheme', $event)"
+            @action="handleAction"
+            @change-language="handleChangeLanguage"
+            @change-theme="handleChangeTheme"
             color="primary" 
             client-name="Alice" />   
         <Codemirror 
             v-model="code" 
             placeholder="Code goes here..." 
+            :style="{ height: 'calc(100vh - 180px)' }"
             :autofocus="true" 
             :indent-with-tab="true" 
             :tab-size="2" 
