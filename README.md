@@ -5,11 +5,16 @@ The instructor will host a room and learners/students can join using their lapto
 
 Behind the scenes, It uses WebRTC (peer-to-peer) connection when online, or WebSockets when you want to host locally on the same network. This has the advantage that none of the students code or your own gets stored on any servers, and is secure. However, the main disadvantage, is that the host should setup the enviorments. (more on this later)
 
+> [!NOTE]  
+> I Stopped working on this project, I wanted to refactor it as I learnt new tools and packages. Also, I got distracted with other projects ... I might return to it ... I might not.
+
 # Guide
 ... wip
 
-# Screenshots
-... wip
+# Screenshots [WIP]
+![home screenshot](./resources/home-screenshot.png)
+![client screenshot](./resources/client-screenshot.png)
+![host screenshot](./resources/host-screenshot.png)
 
 # Credits
 This project uses a combination of the following two templates, go check them out, they are awesome: 
